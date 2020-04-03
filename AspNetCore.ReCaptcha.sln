@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.ReCaptcha", "AspNetCore.ReCaptcha\AspNetCore.ReCaptcha.csproj", "{7D4989AC-7626-43CD-A6F8-67B36FD16611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Example", "AspNetCore.ReCaptcha.Example\AspNetCore.ReCaptcha.Example.csproj", "{019D0A77-EE87-406C-B7EB-E0CB31DF2375}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCore31", "Samples\AspNetCore.ReCaptcha.NetCore31\AspNetCore.ReCaptcha.NetCore31.csproj", "{019D0A77-EE87-406C-B7EB-E0CB31DF2375}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{64E8F22C-ECE7-463C-A4FA-4C38E46712CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCore21", "Samples\AspNetCore.ReCaptcha.NetCore21\AspNetCore.ReCaptcha.NetCore21.csproj", "{9C6CA237-9425-4CE7-8606-DD77BB67C79A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCore50", "Samples\AspNetCore.ReCaptcha.NetCore50\AspNetCore.ReCaptcha.NetCore50.csproj", "{325664CA-6512-4F08-A9D3-796F5FF290E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,22 @@ Global
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{019D0A77-EE87-406C-B7EB-E0CB31DF2375} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
+		{9C6CA237-9425-4CE7-8606-DD77BB67C79A} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
+		{325664CA-6512-4F08-A9D3-796F5FF290E5} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {409CE661-9EE4-4E88-AB83-CD606C9171E6}

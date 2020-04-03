@@ -1,0 +1,31 @@
+﻿@using AspNetCore.ReCaptcha
+@model AspNetCore.ReCaptcha.NetCore50.Models.ContactViewModel
+@{
+    ViewData["Title"] = "Contact";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Send us a contact form!</p>
+<p>@TempData["Message"]</p>
+
+<form method="post" asp-action="SubmitForm">
+    <div asp-validation-summary="All"></div>
+    
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <textarea asp-for="Body" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        @Html.ReCaptcha()
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+    </div>
+</form>

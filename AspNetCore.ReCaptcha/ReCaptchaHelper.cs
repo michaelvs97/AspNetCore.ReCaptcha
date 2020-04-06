@@ -62,16 +62,6 @@ namespace AspNetCore.ReCaptcha
             }
         }
 
-        /// <summary>
-        /// HtmlContentBuilder for v2 ReCaptcha.
-        /// </summary>
-        /// <param name="siteKey">Google ReCaptcha site key.</param>
-        /// <param name="size">Size of the widget.</param>
-        /// <param name="theme">Google ReCaptcha theme. Default is light.</param>
-        /// <param name="successCallback">Google ReCaptcha success callback method. Used in v2 ReCaptcha.</param>
-        /// <param name="errorCallback">Google ReCaptcha error callback method. Used in v2 ReCaptcha.</param>
-        /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
-        /// <returns>HTMLContent of ReCaptcha element.</returns>
         private static IHtmlContent ReCaptchaV2(string siteKey, string size, string theme, string successCallback, string errorCallback, string expiredCallback)
         {
             var id = Guid.NewGuid().ToString().Replace("-", "");

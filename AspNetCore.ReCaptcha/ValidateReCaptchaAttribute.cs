@@ -37,6 +37,9 @@ namespace AspNetCore.ReCaptcha
             _modelErrorMessage = modelErrorMessage;
         }
 
+        /// <summary>
+        /// Gets response from the request form, and tries to validate the response using the ReCaptcha Service.
+        /// </summary>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))

@@ -24,17 +24,18 @@ namespace AspNetCore.ReCaptcha
         }
 
         /// <summary>
-        /// Helper extension to render the Google Recaptcha.
+        /// Helper extension to render the Google ReCaptcha v2/v3.
         /// </summary>
         /// <param name="helper">Html helper object.</param>
-        /// <param name="settings">Recaptcha settings needed to render.</param>
-        /// <param name="theme">Google Recaptcha theme default is light</param>
+        /// <param name="version">Specifies which version of ReCaptcha to use.</param>
+        /// <param name="size">Optional parameter, contains the size of the widget.</param>
+        /// <param name="theme">Google Recaptcha theme default is light.</param>
         /// <param name="action">Google Recaptcha v3 <a href="https://developers.google.com/recaptcha/docs/v3#actions">Action</a></param>
         /// <param name="language">Google Recaptcha <a href="https://developers.google.com/recaptcha/docs/language">Language Code</a></param>
-        /// <param name="id">Google Recaptcha v2-invis button id. This id can't be named submit due to a naming bug.</param>
-        /// <param name="successCallback">Google Recaptcha v2/v2-invis success callback method.</param>
-        /// <param name="errorCallback">Google Recaptcha v2/v2-invis error callback method.</param>
-        /// <param name="expiredCallback">Google Recaptcha v2/v2-invis expired callback method.</param>
+        /// <param name="id">Google ReCaptcha button id. This id can't be named 'submit' due to a naming bug. Used in v2-invis ReCaptcha.</param>
+        /// <param name="successCallback">Google ReCaptcha success callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="errorCallback">Google ReCaptcha error callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
         /// <returns>HtmlString with Recaptcha elements</returns>
         public static IHtmlContent ReCaptcha(this IHtmlHelper helper, ReCaptchaVersion? version = null, string size = "normal", string theme = "light", string action = "homepage", string language = "en", string id = "recaptcha", string successCallback = null, string errorCallback = null, string expiredCallback = null)
         {

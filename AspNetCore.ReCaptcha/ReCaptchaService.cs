@@ -18,6 +18,11 @@ namespace AspNetCore.ReCaptcha
             _reCaptchaSettings = reCaptchaSettings.Value;
         }
 
+        /// <summary>
+        /// Verifies provided ReCaptcha Response.
+        /// </summary>
+        /// <param name="reCaptchaResponse">ReCaptcha Response as given by the widget.</param>
+        /// <returns>Returns result of the verification of the ReCaptcha Response.</returns>
         public async Task<bool> Verify(string reCaptchaResponse)
         {
             var body = new FormUrlEncodedContent(new Dictionary<string, string>()

@@ -1,4 +1,6 @@
 ﻿@using AspNetCore.ReCaptcha
+@using Microsoft.Extensions.Options
+@inject IOptions<ReCaptchaSettings> ReCaptchaSettings
 @model ContactViewModel
 @{
     ViewData["Title"] = "Contact";
@@ -7,6 +9,12 @@
 
 <p>Send us a contact form!</p>
 <p>@TempData["Message"]</p>
+
+<script>
+function submitForm() {
+    document.forms[0].submit();
+}
+</script>
 
 <form method="post" asp-action="SubmitForm">
     <div asp-validation-summary="All"></div>
@@ -22,10 +30,21 @@
     </div>
 
     <div class="form-group">
-        @Html.ReCaptcha()
+        @switch (ReCaptchaSettings.Value.Version)
+        {
+            case ReCaptchaVersion.V2:
+                @Html.ReCaptcha()
+                break;
+            case ReCaptchaVersion.V2Invisible:
+                @Html.ReCaptcha("Submit Invisible ReCaptcha", className: "btn btn-primary", callback: "submitForm")
+                break;
+        }
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Submit" class="btn btn-primary" />
-    </div>
+    @if (ReCaptchaSettings.Value.Version != ReCaptchaVersion.V2Invisible)
+    {
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </div>
+    }
 </form>

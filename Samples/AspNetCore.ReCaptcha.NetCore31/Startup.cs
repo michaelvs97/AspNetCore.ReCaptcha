@@ -19,7 +19,7 @@ namespace AspNetCore.ReCaptcha.NetCore31
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
+            services.AddReCaptcha(Configuration.GetSection("ReCaptchaInvisible"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

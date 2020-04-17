@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -118,15 +117,15 @@ namespace AspNetCore.ReCaptcha
         private static IHtmlContent ReCaptchaV3(string siteKey, string action, string callBack)
         {
             var content = new HtmlContentBuilder();
-            content.AppendHtml(
-                @"<input id=""g-recaptcha-response"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
+            content.AppendHtml(@"<input id=""g-recaptcha-response"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
             content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?render={0}""></script>", siteKey);
-			content.AppendHtml("<script>");
-			content.AppendHtml("grecaptcha.ready(function() {");
-            content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(", siteKey, action);
-            content.AppendHtml("function(token) {");
+            content.AppendHtml("<script>");
+            content.AppendHtml("function updateReCaptcha() {");
+            content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);
             content.AppendHtml("document.getElementById('g-recaptcha-response').value = token;");
-            content.AppendHtml("});});");
+            content.AppendHtml("});");
+            content.AppendHtml("}");
+            content.AppendHtml("grecaptcha.ready(function() {setInterval(updateReCaptcha, 100000); updateReCaptcha()});");
             content.AppendHtml("</script>");
             content.AppendLine();
 

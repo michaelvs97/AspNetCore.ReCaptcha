@@ -19,7 +19,8 @@ Place the aquired secret key and site key in the appsettings.json of your projec
     {
 	    "ReCaptcha": {
 		    "SiteKey": "your site key here",
-		    "SecretKey": "your secret key here"
+		    "SecretKey": "your secret key here",
+		    "Version": "v2"
 	    }
     }
 

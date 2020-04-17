@@ -1,5 +1,5 @@
 # AspNetCore.ReCaptcha
-ReCAPTCHA Library for .NET Core 2.x/3.x/5.x implemented in .NET Core 3.1.
+ReCAPTCHA Library for .NET Core 2.x/3.x/5.x.
 
 ## Requirements
 This package requires a secret key as well as a site key provided by ReCaptcha. You can aquire your keyset at [https://www.google.com/recaptcha/intro/v3.html](https://www.google.com/recaptcha/intro/v3.html). It's possible to use either v2 or v3 ReCaptcha.

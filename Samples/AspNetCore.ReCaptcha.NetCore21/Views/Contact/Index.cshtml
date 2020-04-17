@@ -38,6 +38,9 @@ function submitForm() {
             case ReCaptchaVersion.V2Invisible:
                 @Html.ReCaptcha("Submit Invisible ReCaptcha", className: "btn btn-primary", callback: "submitForm")
                 break;
+            case ReCaptchaVersion.V3:
+                @Html.ReCaptcha(action: "homepage")
+                break;
         }
     </div>
 

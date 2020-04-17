@@ -72,7 +72,7 @@ namespace AspNetCore.ReCaptcha
                 case ReCaptchaVersion.V2Invisible:
                     return ReCaptchaV2Invisible(settings.SiteKey, text, className, callback, badge);
                 case ReCaptchaVersion.V3:
-                    return ReCaptchaV3();
+                    return ReCaptchaV3(settings.SiteKey, action, callback);
             }
         }
 
@@ -114,9 +114,22 @@ namespace AspNetCore.ReCaptcha
             return content;
         }
 
-        private static IHtmlContent ReCaptchaV3()
+        private static IHtmlContent ReCaptchaV3(string siteKey, string action, string callBack)
         {
-            throw new NotImplementedException();
+            var content = new HtmlContentBuilder();
+            content.AppendHtml(@"<input id=""g-recaptcha-response"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
+            content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?render={0}""></script>", siteKey);
+            content.AppendHtml("<script>");
+            content.AppendHtml("function updateReCaptcha() {");
+            content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);
+            content.AppendHtml("document.getElementById('g-recaptcha-response').value = token;");
+            content.AppendHtml("});");
+            content.AppendHtml("}");
+            content.AppendHtml("grecaptcha.ready(function() {setInterval(updateReCaptcha, 100000); updateReCaptcha()});");
+            content.AppendHtml("</script>");
+            content.AppendLine();
+
+            return content;
         }
     }
 }

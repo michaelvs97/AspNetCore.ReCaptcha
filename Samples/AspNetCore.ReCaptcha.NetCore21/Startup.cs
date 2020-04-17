@@ -33,7 +33,7 @@ namespace AspNetCore.ReCaptcha.NetCore21
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
+            services.AddReCaptcha(Configuration.GetSection("ReCaptchaV3"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

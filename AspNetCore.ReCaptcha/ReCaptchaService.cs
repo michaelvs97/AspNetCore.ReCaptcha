@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AspNetCore.ReCaptcha.Models;
 using Microsoft.Extensions.Options;
 
 namespace AspNetCore.ReCaptcha

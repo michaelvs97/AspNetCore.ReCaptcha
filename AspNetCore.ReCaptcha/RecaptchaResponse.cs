@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace AspNetCore.ReCaptcha.Models
+namespace AspNetCore.ReCaptcha
 {
     class ReCaptchaResponse
     {

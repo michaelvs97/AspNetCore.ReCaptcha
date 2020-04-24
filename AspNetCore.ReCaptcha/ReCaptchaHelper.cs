@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,7 @@ namespace AspNetCore.ReCaptcha
             string size = "normal",
             string theme = "light",
             string action = "homepage",
-            string language = "en",
+            string language = null,
             string id = "recaptcha",
             string badge = "bottomright",
             string callback = null,
@@ -59,8 +60,8 @@ namespace AspNetCore.ReCaptcha
             if (id.ToLower() == "submit")
                 throw new ArgumentException("id can't be named submit");
 
-            var uid = Guid.NewGuid();
-            var method = uid.ToString().Replace("-", "_");
+            language ??= helper.ViewContext.HttpContext.Features.Get<IRequestCultureFeature>()?.RequestCulture
+                .UICulture.TwoLetterISOLanguageName;
 
             var settings = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>().Value;
 
@@ -68,15 +69,15 @@ namespace AspNetCore.ReCaptcha
             {
                 default:
                 case ReCaptchaVersion.V2:
-                    return ReCaptchaV2(settings.SiteKey, size, theme, callback, errorCallback, expiredCallback);
+                    return ReCaptchaV2(settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback);
                 case ReCaptchaVersion.V2Invisible:
-                    return ReCaptchaV2Invisible(settings.SiteKey, text, className, callback, badge);
+                    return ReCaptchaV2Invisible(settings.SiteKey, text, className, language, callback, badge);
                 case ReCaptchaVersion.V3:
-                    return ReCaptchaV3(settings.SiteKey, action, callback);
+                    return ReCaptchaV3(settings.SiteKey, action, language, callback);
             }
         }
 
-        private static IHtmlContent ReCaptchaV2(string siteKey, string size, string theme, string callback, string errorCallback, string expiredCallback)
+        private static IHtmlContent ReCaptchaV2(string siteKey, string size, string theme, string language, string callback, string errorCallback, string expiredCallback)
         {
             var content = new HtmlContentBuilder();
             content.AppendFormat(@"<div class=""g-recaptcha"" data-sitekey=""{0}""", siteKey);
@@ -94,12 +95,12 @@ namespace AspNetCore.ReCaptcha
 
             content.AppendFormat("></div>");
             content.AppendLine();
-            content.AppendHtmlLine(@"<script src=""https://www.google.com/recaptcha/api.js"" defer></script>");
+            content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?hl={0}"" defer></script>", language);
 
             return content;
         }
 
-        private static IHtmlContent ReCaptchaV2Invisible(string siteKey, string text, string className, string callback, string badge)
+        private static IHtmlContent ReCaptchaV2Invisible(string siteKey, string text, string className, string language, string callback, string badge)
         {
             var content = new HtmlContentBuilder();
             content.AppendFormat(@"<button class=""g-recaptcha {0}""", className);
@@ -109,16 +110,16 @@ namespace AspNetCore.ReCaptcha
             content.AppendFormat(@">{0}</button>", text);
             content.AppendLine();
 
-            content.AppendHtmlLine(@"<script src=""https://www.google.com/recaptcha/api.js"" defer></script>");
+            content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?hl={0}"" defer></script>", language);
 
             return content;
         }
 
-        private static IHtmlContent ReCaptchaV3(string siteKey, string action, string callBack)
+        private static IHtmlContent ReCaptchaV3(string siteKey, string action, string language, string callBack)
         {
             var content = new HtmlContentBuilder();
             content.AppendHtml(@"<input id=""g-recaptcha-response"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
-            content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?render={0}""></script>", siteKey);
+            content.AppendFormat(@"<script src=""https://www.google.com/recaptcha/api.js?render={0}&hl={1}""></script>", siteKey, language);
             content.AppendHtml("<script>");
             content.AppendHtml("function updateReCaptcha() {");
             content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);

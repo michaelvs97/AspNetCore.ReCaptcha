@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,7 @@ namespace AspNetCore.ReCaptcha.NetCore50
         {
             services.AddControllersWithViews();
             services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
+            services.AddLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +45,17 @@ namespace AspNetCore.ReCaptcha.NetCore50
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            var supportedLocales =
+                "ar,af,am,hy,az,eu,bn,bg,ca,zh-HK,zh-CN,zh-TW,hr,cs,da,nl,en-GB,en,et,fil,fi,fr,fr-CA,gl,ka,de,de-AT,de-CH,el,gu,iw,hi,hu,is,id,it,ja,kn,ko,lo,lv,lt,ms,ml,mr,mn,no,fa,pl,pt,pt-BR,pt-PT,ro,ru,sr,si,sk,sl,es,es-419,sw,sv,ta,te,th,tr,uk,ur,vi,zu"
+                    .Split(',')
+                    .Select(code => new CultureInfo(code))
+                    .ToList();
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                SupportedCultures = supportedLocales,
+                SupportedUICultures = supportedLocales,
+            });
 
             app.UseRouting();
 

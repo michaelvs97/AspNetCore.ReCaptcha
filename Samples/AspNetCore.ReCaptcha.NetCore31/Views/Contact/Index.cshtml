@@ -40,7 +40,8 @@ function submitForm() {
             case ReCaptchaVersion.V2:
                 // Optionally override language of the recaptcha
                 // @Html.ReCaptcha(language: "en")
-                @Html.ReCaptcha()
+                // @Html.ReCaptcha()
+                 <recaptcha language="nl" />
                 break;
             case ReCaptchaVersion.V2Invisible:
                 @Html.ReCaptcha("Submit Invisible ReCaptcha", className: "btn btn-primary", callback: "submitForm")

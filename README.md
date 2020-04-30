@@ -52,7 +52,7 @@ And then you can add the ReCaptcha element to your DOM using the following code 
 <recaptcha />
 ```
 To be able to make use of the taghelper, you will need to include the following line of code in your `_ViewImports.cshtml`:
-```csharp
+```cshtml
 @addTagHelper *, AspNetCore.ReCaptcha
 ```
 

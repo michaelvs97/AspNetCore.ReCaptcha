@@ -1,4 +1,3 @@
-
 # AspNetCore.ReCaptcha
 ReCAPTCHA Library for .NET Core 2.x/3.x/5.x.
 
@@ -52,6 +51,10 @@ And then you can add the ReCaptcha element to your DOM using the following code 
 ```cshtml
 <recaptcha />
 ```
+To be able to make use of the taghelper, you will need to include the following line of code in your `_ViewImports.cshtml`:
+```csharp
+@addTagHelper *, AspNetCore.ReCaptcha
+```
 
 The action that you will be posting to (in this case SubmitForm) will need the following attribute on the method:
 
@@ -69,7 +72,7 @@ public IActionResult SubmitForm(ContactViewModel model)
 ```
 
 ### Language support
-By default, AspNetCore.ReCaptcha will use the language that is being used in the request. So we will make use of the Culture of the `HttpContext`. However, you can overrule this by specifying a language in the ReCaptcha element. This is shown in the next example:
+By default, AspNetCore.ReCaptcha will use the language that is being used in the request. So we will make use of the Culture of the `HttpContext`. However, you can override this by specifying a language in the ReCaptcha element. This is shown in the next example:
 ```cshtml
 @Html.ReCaptcha(language: "en-GB")
 ```

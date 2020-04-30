@@ -85,4 +85,7 @@ We support all languages supported by ReCaptcha, list can be found [here](https:
 You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
 
 ## Examples
-For every version of .NET Core there is a configured example included in this repository. Check the Samples map for those examples.
+For every version of .NET Core there is a configured example included in this repository. Examples are linked below for quick access:
+[.NET Core 2.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore21)
+[.NET Core 3.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore31)
+[.NET Core 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore50)

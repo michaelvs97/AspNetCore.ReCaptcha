@@ -47,7 +47,7 @@ In your .cshtml file you add the following using statement:
 And then you can add the ReCaptcha element to your DOM using the following code or make use of the tag-helper:
 
 ```cshtml
-@Html.ReCaptcha
+@Html.ReCaptcha()
 ```
 ```cshtml
 <recaptcha />

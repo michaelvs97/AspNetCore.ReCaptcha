@@ -43,10 +43,17 @@ In your .cshtml file you add the following using statement:
 @using AspNetCore.ReCaptcha
 ```
 
-And then you can add the ReCaptcha element to your DOM using the following code:
+And then you can add the ReCaptcha element to your DOM using the following code or make use of the tag-helper:
 
 ```cshtml
-@Html.ReCaptcha
+@Html.ReCaptcha()
+```
+```cshtml
+<recaptcha />
+```
+To be able to make use of the taghelper, you will need to include the following line of code in your `_ViewImports.cshtml`:
+```cshtml
+@addTagHelper *, AspNetCore.ReCaptcha
 ```
 
 The action that you will be posting to (in this case SubmitForm) will need the following attribute on the method:
@@ -64,5 +71,24 @@ public IActionResult SubmitForm(ContactViewModel model)
 }
 ```
 
+### Language support
+By default, AspNetCore.ReCaptcha will use the language that is being used in the request. So we will make use of the Culture of the `HttpContext`. However, you can override this by specifying a language in the ReCaptcha element. This is shown in the next example:
+```cshtml
+@Html.ReCaptcha(language: "en-GB")
+```
+
+```cshtml
+<recaptcha language="en-GB" />
+```
+We support all languages supported by ReCaptcha, list can be found [here](https://developers.google.com/recaptcha/docs/language).
+
+You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
+
 ## Examples
-For every version of .NET Core there is a configured example included in this repository. Check the Samples map for those examples.
+For every version of .NET Core there is a configured example included in this repository. Examples are linked below for quick access:
+
+[.NET Core 2.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore21)
+
+[.NET Core 3.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore31)
+
+[.NET Core 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore50)

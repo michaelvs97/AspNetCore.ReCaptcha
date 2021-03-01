@@ -4,6 +4,6 @@ namespace AspNetCore.ReCaptcha
 {
     public interface IReCaptchaService
     {
-        Task<bool> Verify(string reCaptchaResponse);
+        Task<bool> VerifyAsync(string reCaptchaResponse);
     }
 }

@@ -1,5 +1,5 @@
 # AspNetCore.ReCaptcha
-ReCAPTCHA Library for .NET Core 2.x/3.x/5.x.
+ReCAPTCHA Library for .NET Core 3.x/5.x.
 
 ## Requirements
 This package requires a secret key as well as a site key provided by ReCaptcha. You can aquire your keyset at [https://www.google.com/recaptcha/intro/v3.html](https://www.google.com/recaptcha/intro/v3.html). It's possible to use either v2 or v3 ReCaptcha.
@@ -85,10 +85,8 @@ We support all languages supported by ReCaptcha, list can be found [here](https:
 You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
 
 ## Examples
-For every version of .NET Core there is a configured example included in this repository. Examples are linked below for quick access:
-
-[.NET Core 2.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore21)
+For every version of .NET Core there is a configured example included in this repository. As of .NET 5.0, we support both MVC and Razor pages. Examples are linked below for quick access:
 
 [.NET Core 3.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore31)
 
-[.NET Core 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore50)
+[.NET Core 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)

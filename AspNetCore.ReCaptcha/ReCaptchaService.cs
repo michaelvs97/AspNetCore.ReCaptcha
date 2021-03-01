@@ -22,7 +22,7 @@ namespace AspNetCore.ReCaptcha
         /// </summary>
         /// <param name="reCaptchaResponse">ReCaptcha Response as given by the widget.</param>
         /// <returns>Returns result of the verification of the ReCaptcha Response.</returns>
-        public async Task<bool> Verify(string reCaptchaResponse)
+        public async Task<bool> VerifyAsync(string reCaptchaResponse)
         {
             var body = new FormUrlEncodedContent(new Dictionary<string, string>()
             {

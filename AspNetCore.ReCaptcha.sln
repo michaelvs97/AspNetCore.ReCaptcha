@@ -9,9 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{64E8F22C-ECE7-463C-A4FA-4C38E46712CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCore21", "Samples\AspNetCore.ReCaptcha.NetCore21\AspNetCore.ReCaptcha.NetCore21.csproj", "{9C6CA237-9425-4CE7-8606-DD77BB67C79A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.NetCore50", "Samples\AspNetCore.ReCaptcha.NetCore50\AspNetCore.ReCaptcha.NetCore50.csproj", "{325664CA-6512-4F08-A9D3-796F5FF290E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Net50", "Samples\AspNetCore.ReCaptcha.Net50\AspNetCore.ReCaptcha.Net50.csproj", "{325664CA-6512-4F08-A9D3-796F5FF290E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C6CA237-9425-4CE7-8606-DD77BB67C79A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,7 +35,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
-		{9C6CA237-9425-4CE7-8606-DD77BB67C79A} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 		{325664CA-6512-4F08-A9D3-796F5FF290E5} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

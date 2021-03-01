@@ -8,7 +8,7 @@ namespace AspNetCore.ReCaptcha
     /// <summary>
     /// Validates Recaptcha submitted by a form using: @Html.ReCaptcha()
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false)]
     public class ValidateReCaptchaAttribute : Attribute, IFilterFactory
     {
         public bool IsReusable => true;
@@ -24,7 +24,7 @@ namespace AspNetCore.ReCaptcha
         }
     }
 
-    public class ValidateRecaptchaFilter : IAsyncActionFilter
+    public class ValidateRecaptchaFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         private readonly IReCaptchaService _recaptcha;
         private readonly string _formField;
@@ -42,14 +42,34 @@ namespace AspNetCore.ReCaptcha
         /// </summary>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))
+            if (context.HttpContext.Request.HasFormContentType && context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))
             {
-                var isValid = await _recaptcha.Verify(reCaptchaResponse);
+                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
                 if (!isValid)
                     context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
             }
 
             await next();
+        }
+
+        /// <summary>
+        /// Gets response from the request form, and tries to validate the response using the ReCaptcha Service.
+        /// </summary>
+        public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+        {
+            if (context.HttpContext.Request.HasFormContentType && context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))
+            {
+                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
+                if (!isValid)
+                    context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
+            }
+
+            await next();
+        }
+
+        public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

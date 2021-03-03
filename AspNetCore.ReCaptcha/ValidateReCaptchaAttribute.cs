@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace AspNetCore.ReCaptcha
     /// Validates Recaptcha submitted by a form using: @Html.ReCaptcha()
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false)]
+    [ExcludeFromCodeCoverage]
     public class ValidateReCaptchaAttribute : Attribute, IFilterFactory
     {
         public bool IsReusable => true;
@@ -67,6 +69,7 @@ namespace AspNetCore.ReCaptcha
             await next();
         }
 
+        [ExcludeFromCodeCoverage]
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
             return Task.CompletedTask;

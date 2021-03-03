@@ -2,12 +2,12 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace AspNetCore.ReCaptcha.Tests
@@ -55,7 +55,7 @@ namespace AspNetCore.ReCaptcha.Tests
                     "SendAsync", 
                     ItExpr.IsAny<HttpRequestMessage>(),
                     ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonConvert.SerializeObject(reCaptchaResponse), Encoding.UTF8,"application/json")});
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
 
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
             

@@ -24,7 +24,7 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal --collect 'XPlat Code Coverage' --settings coveralls.runsettings
     - run: |
         mkdir TestResults
-        mv tests/*/TestResults/*/coverage.info TestResults/.
+        mv */TestResults/*/coverage.info TestResults/.
     - name: Publish Code Coverage
       uses: coverallsapp/github-action@master
       with:

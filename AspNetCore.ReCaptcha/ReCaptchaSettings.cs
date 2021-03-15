@@ -1,5 +1,8 @@
-﻿namespace AspNetCore.ReCaptcha
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AspNetCore.ReCaptcha
 {
+    [ExcludeFromCodeCoverage]
     public class ReCaptchaSettings
     {
         public string SiteKey { get; set; }

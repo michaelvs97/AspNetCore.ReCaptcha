@@ -3,23 +3,17 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageId>AspNetCore.ReCaptcha</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Authors>Michaelvs97,sleeuwen</Authors>
     <Description>Google ReCAPTCHA v2/v3 Library for .NET Core 3.x/5.x</Description>
-    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET Core 2.x/3.x/5.x</PackageDescription>
+    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET Core 3.x/5.x</PackageDescription>
     <RepositoryUrl>https://github.com/michaelvs97/AspNetCore.ReCaptcha</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.ReCaptcha</Title>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.*" />
-    <PackageReference Include="System.Text.Json" Version="4.6.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
   </ItemGroup>

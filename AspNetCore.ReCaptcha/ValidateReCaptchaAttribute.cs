@@ -2,6 +2,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCore.ReCaptcha
@@ -44,13 +46,7 @@ namespace AspNetCore.ReCaptcha
         /// </summary>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.HttpContext.Request.HasFormContentType && context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))
-            {
-                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
-                if (!isValid)
-                    context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
-            }
-
+            await ValidateRecaptcha(context);
             await next();
         }
 
@@ -59,20 +55,38 @@ namespace AspNetCore.ReCaptcha
         /// </summary>
         public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            if (context.HttpContext.Request.HasFormContentType && context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse))
-            {
-                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
-                if (!isValid)
-                    context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
-            }
+            if (ShouldValidate(context))
+                await ValidateRecaptcha(context);
 
             await next();
+
+            static bool ShouldValidate(ActionContext context)
+            {
+                return !HttpMethods.IsGet(context.HttpContext.Request.Method)
+                    && !HttpMethods.IsHead(context.HttpContext.Request.Method)
+                    && !HttpMethods.IsOptions(context.HttpContext.Request.Method);
+            }
         }
 
         [ExcludeFromCodeCoverage]
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
             return Task.CompletedTask;
+        }
+
+        private async Task ValidateRecaptcha(ActionContext context)
+        {
+            if (!context.HttpContext.Request.HasFormContentType)
+            {
+                context.ModelState.AddModelError("", _modelErrorMessage);
+            }
+            else
+            {
+                _ = context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse);
+                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
+                if (!isValid)
+                    context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
+            }
         }
     }
 }

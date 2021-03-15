@@ -16,6 +16,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Install dependencies
       run: dotnet restore
     - name: Build

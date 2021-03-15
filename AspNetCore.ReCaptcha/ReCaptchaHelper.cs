@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace AspNetCore.ReCaptcha
 {
+    [ExcludeFromCodeCoverage]
     public static class ReCaptchaHelper
     {
         public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration)

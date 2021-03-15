@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageId>AspNetCore.ReCaptcha</PackageId>
     <Version>1.2.0</Version>
     <Authors>Michaelvs97,sleeuwen</Authors>

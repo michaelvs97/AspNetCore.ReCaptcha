@@ -1,4 +1,7 @@
 # AspNetCore.ReCaptcha
+[![NuGet Version](http://img.shields.io/nuget/v/AspNetCore.ReCaptcha.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.ReCaptcha/) 
+[![Coverage Status](https://coveralls.io/repos/github/michaelvs97/AspNetCore.ReCaptcha/badge.svg?branch=master)](https://coveralls.io/github/michaelvs97/AspNetCore.ReCaptcha?branch=master)
+
 ReCAPTCHA Library for .NET Core 3.x/5.x.
 
 ## Requirements

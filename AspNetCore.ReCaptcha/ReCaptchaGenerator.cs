@@ -12,7 +12,7 @@ namespace AspNetCore.ReCaptcha
             if (!string.IsNullOrEmpty(size))
                 content.AppendFormat(@" data-size=""{0}""", size);
             if (!string.IsNullOrEmpty(theme))
-                content.AppendFormat(@" data-format=""{0}""", theme);
+                content.AppendFormat(@" data-theme=""{0}""", theme);
             if (!string.IsNullOrEmpty(callback))
                 content.AppendFormat(@" data-callback=""{0}""", callback);
             if (!string.IsNullOrEmpty(errorCallback))

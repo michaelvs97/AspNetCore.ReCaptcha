@@ -8,5 +8,6 @@ namespace AspNetCore.ReCaptcha
         public string SiteKey { get; set; }
         public string SecretKey { get; set; }
         public ReCaptchaVersion Version { get; set; }
+        public bool UseRecaptchaNet { get; set; }
     }
 }

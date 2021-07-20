@@ -30,7 +30,18 @@ namespace AspNetCore.ReCaptcha
                 ["response"] = reCaptchaResponse
             });
 
-            var result = await _client.PostAsync("https://www.google.com/recaptcha/api/siteverify", body);
+            var url = "https://";
+            if (!_reCaptchaSettings.UseRecaptchaNet)
+            {
+                url += "www.google.com/recaptcha";
+            }
+            else
+            {
+                url += "www.recaptcha.net";
+            }
+            url += "/api/siteverify";
+            
+            var result = await _client.PostAsync(url, body);
 
             var stringResult = await result.Content.ReadAsStringAsync();
 

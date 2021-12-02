@@ -2,7 +2,7 @@
 [![NuGet Version](http://img.shields.io/nuget/v/AspNetCore.ReCaptcha.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.ReCaptcha/) 
 [![Coverage Status](https://coveralls.io/repos/github/michaelvs97/AspNetCore.ReCaptcha/badge.svg?branch=master)](https://coveralls.io/github/michaelvs97/AspNetCore.ReCaptcha?branch=master)
 
-ReCAPTCHA Library for .NET Core 3.x/5.x.
+ReCAPTCHA Library for .NET Core 3.1 and .NET 5.0/6.0.
 
 ## Requirements
 This package requires a secret key as well as a site key provided by ReCaptcha. You can aquire your keyset at [https://www.google.com/recaptcha/intro/v3.html](https://www.google.com/recaptcha/intro/v3.html). It's possible to use either v2 or v3 ReCaptcha.
@@ -38,6 +38,12 @@ To use AspNetCore.ReCaptcha in your project, you must add the following code to 
 public void ConfigureServices(IServiceCollection services) {
     services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
 }
+```
+
+or if you are using the new minimal API in .NET 6.0 add this to your program.cs instead:
+
+```csharp
+builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptcha"));
 ```
 
 In your .cshtml file you add the following using statement:
@@ -88,8 +94,12 @@ We support all languages supported by ReCaptcha, list can be found [here](https:
 You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
 
 ## Examples
-For every version of .NET Core there is a configured example included in this repository. As of .NET 5.0, we support both MVC and Razor pages. Examples are linked below for quick access:
+For every supported version of .NET there is a configured example included in this repository.
+As of .NET 5.0, we support both MVC and Razor pages. The .NET 6.0 example is using the new minimal API.
+Examples are linked below for quick access:
 
 [.NET Core 3.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore31)
 
-[.NET Core 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)
+[.NET 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)
+
+[.NET 6.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)

@@ -5,8 +5,8 @@
     <PackageId>AspNetCore.ReCaptcha</PackageId>
     <Version>1.2.6</Version>
     <Authors>Michaelvs97,sleeuwen</Authors>
-    <Description>Google ReCAPTCHA v2/v3 Library for .NET Core 3.x/5.x</Description>
-    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET Core 3.x/5.x</PackageDescription>
+    <Description>Google ReCAPTCHA v2/v3 Library for .NET Core 3.1 and .NET 5.0/6.0</Description>
+    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET Core 3.1 and .NET 5.0/6.0</PackageDescription>
     <RepositoryUrl>https://github.com/michaelvs97/AspNetCore.ReCaptcha</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.ReCaptcha</Title>

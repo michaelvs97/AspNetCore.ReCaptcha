@@ -17,12 +17,21 @@ namespace AspNetCore.ReCaptcha
             _reCaptchaSettings = reCaptchaSettings.Value;
         }
 
-        /// <summary>
-        /// Verifies provided ReCaptcha Response.
-        /// </summary>
-        /// <param name="reCaptchaResponse">ReCaptcha Response as given by the widget.</param>
-        /// <returns>Returns result of the verification of the ReCaptcha Response.</returns>
+        /// <inheritdoc />
         public async Task<bool> VerifyAsync(string reCaptchaResponse)
+        {
+            var obj = await GetVerifyResponseAsync(reCaptchaResponse);
+
+            if (_reCaptchaSettings.Version == ReCaptchaVersion.V3)
+            {
+                return obj.Success && obj.Score >= _reCaptchaSettings.ScoreThreshold;
+            }
+
+            return obj.Success;
+        }
+
+        /// <inheritdoc />
+        public async Task<ReCaptchaResponse> GetVerifyResponseAsync(string reCaptchaResponse)
         {
             var body = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
@@ -40,14 +49,14 @@ namespace AspNetCore.ReCaptcha
                 url += "www.recaptcha.net";
             }
             url += "/api/siteverify";
-            
+
             var result = await _client.PostAsync(url, body);
 
             var stringResult = await result.Content.ReadAsStringAsync();
 
             var obj = JsonSerializer.Deserialize<ReCaptchaResponse>(stringResult);
 
-            return obj.Success;
+            return obj;
         }
     }
 }

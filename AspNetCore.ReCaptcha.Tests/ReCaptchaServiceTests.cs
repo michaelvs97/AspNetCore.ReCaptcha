@@ -30,7 +30,7 @@ namespace AspNetCore.ReCaptcha.Tests
                 reCaptchaSettingsMock = new Mock<IOptions<ReCaptchaSettings>>();
                 reCaptchaSettingsMock.Setup(x => x.Value).Returns(reCaptchaSettings);
             }
-            
+
             return new ReCaptchaService(httpClient, reCaptchaSettingsMock.Object);
         }
 
@@ -44,21 +44,21 @@ namespace AspNetCore.ReCaptcha.Tests
                 Action = "Test",
                 ChallengeTimestamp = DateTime.Now,
                 Hostname = "Test",
-                Score = decimal.One,
+                Score = 1.0,
                 Success = successResult
             };
-            
+
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
 
             mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync", 
+                    "SendAsync",
                     ItExpr.IsAny<HttpRequestMessage>(),
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
 
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
-            
+
             var reCaptchaService = CreateService(httpClient);
 
             var result = reCaptchaService.VerifyAsync("123").Result;

@@ -26,7 +26,9 @@ Place the aquired secret key and site key in the appsettings.json of your projec
     "ReCaptcha": {
         "SiteKey": "your site key here",
         "SecretKey": "your secret key here",
-        "Version": "v2"
+        "Version": "v2", // The ReCaptcha version to use, can be v2, v2invisible or v3
+        "UseRecaptchaNet": false, // Value whether to use google recaptcha or recaptcha.net
+        "ScoreThreshold": 0.5, // Only applicable for recaptcha v3, specifies the score threshold when it is considered successful
     }
 }
 ```
@@ -34,7 +36,7 @@ Place the aquired secret key and site key in the appsettings.json of your projec
 ## Usage
 To use AspNetCore.ReCaptcha in your project, you must add the following code to your startup.cs:
 
-```csharp
+```C#
 public void ConfigureServices(IServiceCollection services) {
     services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
 }
@@ -67,7 +69,7 @@ To be able to make use of the taghelper, you will need to include the following 
 
 The action that you will be posting to (in this case SubmitForm) will need the following attribute on the method:
 
-```csharp
+```C#
 [ValidateReCaptcha]
 [HttpPost]
 public IActionResult SubmitForm(ContactViewModel model)
@@ -103,3 +105,4 @@ Examples are linked below for quick access:
 [.NET 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)
 
 [.NET 6.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)
+

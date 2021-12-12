@@ -12,14 +12,14 @@ namespace AspNetCore.ReCaptcha
     [HtmlTargetElement("recaptcha")]
     public class ReCaptchaTagHelper : TagHelper
     {
-        public string Text {get;set;} = "Submit";
-        public string ClassName {get;set;} = "";
-        public string Size {get;set;} = "normal";
-        public string Theme {get;set;} = "light";
-        public string Action {get;set;} = "homepage";
-        public string Language {get;set;} = null;
-        public string Id {get;set;} = "recaptcha";
-        public string Badge {get;set;} = "bottomright";
+        public string Text { get; set; } = "Submit";
+        public string ClassName { get; set; } = "";
+        public string Size { get; set; } = "normal";
+        public string Theme { get; set; } = "light";
+        public string Action { get; set; } = "homepage";
+        public string Language { get; set; } = null;
+        public string Id { get; set; } = "recaptcha";
+        public string Badge { get; set; } = "bottomright";
         public string Callback { get; set; } = null;
         public string ErrorCallback { get; set; } = null;
         public string ExpiredCallback { get; set; } = null;

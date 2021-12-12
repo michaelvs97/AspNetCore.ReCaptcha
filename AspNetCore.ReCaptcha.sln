@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.ReCaptcha.Net50"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Tests", "AspNetCore.ReCaptcha.Tests\AspNetCore.ReCaptcha.Tests.csproj", "{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Net60", "Samples\AspNetCore.ReCaptcha.Net60\AspNetCore.ReCaptcha.Net60.csproj", "{69C5814C-1012-49AC-9126-C6F7FD999213}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C5814C-1012-49AC-9126-C6F7FD999213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C5814C-1012-49AC-9126-C6F7FD999213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C5814C-1012-49AC-9126-C6F7FD999213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C5814C-1012-49AC-9126-C6F7FD999213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{019D0A77-EE87-406C-B7EB-E0CB31DF2375} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 		{325664CA-6512-4F08-A9D3-796F5FF290E5} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
+		{69C5814C-1012-49AC-9126-C6F7FD999213} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {409CE661-9EE4-4E88-AB83-CD606C9171E6}

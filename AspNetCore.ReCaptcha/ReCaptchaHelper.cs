@@ -12,17 +12,34 @@ namespace AspNetCore.ReCaptcha
     [ExcludeFromCodeCoverage]
     public static class ReCaptchaHelper
     {
+        private static void AddReCaptchaServices(this IServiceCollection services)
+        {
+            services.PostConfigure<ReCaptchaSettings>(settings =>
+            {
+                settings.LocalizerProvider ??= (modelType, localizerFactory) => localizerFactory.Create(modelType);
+            });
+            services.AddHttpClient<IReCaptchaService, ReCaptchaService>();
+        }
+
         public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ReCaptchaSettings>(configuration);
-            services.AddHttpClient<IReCaptchaService, ReCaptchaService>();
+            services.AddReCaptchaServices();
             return services;
         }
 
         public static IServiceCollection AddReCaptcha(this IServiceCollection services, Action<ReCaptchaSettings> configureOptions)
         {
             services.Configure(configureOptions);
-            services.AddHttpClient<IReCaptchaService, ReCaptchaService>();
+            services.AddReCaptchaServices();
+            return services;
+        }
+
+        public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration, Action<ReCaptchaSettings> configureOptions)
+        {
+            services.Configure<ReCaptchaSettings>(configuration);
+            services.Configure(configureOptions);
+            services.AddReCaptchaServices();
             return services;
         }
 

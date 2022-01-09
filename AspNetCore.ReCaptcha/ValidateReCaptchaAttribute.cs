@@ -23,7 +23,7 @@ namespace AspNetCore.ReCaptcha
         internal const string DefaultErrorMessage = "Your request cannot be completed because you failed Recaptcha verification.";
 
         public bool IsReusable => true;
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = null;
 
         public string FormField { get; set; } = "g-recaptcha-response";
 

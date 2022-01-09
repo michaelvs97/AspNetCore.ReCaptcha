@@ -93,6 +93,13 @@ By default, AspNetCore.ReCaptcha will use the language that is being used in the
 ```
 We support all languages supported by ReCaptcha, list can be found [here](https://developers.google.com/recaptcha/docs/language).
 
+This will only change the language of the recaptcha widget that is shown, not the language of the message that is shown when the recaptcha failed.
+
+To localize the error message (e.g. the message set with `[ValidateReCaptcha(ErrorMessage = "")]`), add the message
+to the resource file of the controller or razor page that the validate attribute is used. For an example of this check
+the [.NET 6 sample](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)
+and look at the Pages/ContactModel.cs and Resources/Pages/ContactModel.resx files.
+
 You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
 
 ## Examples
@@ -105,4 +112,3 @@ Examples are linked below for quick access:
 [.NET 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)
 
 [.NET 6.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)
-

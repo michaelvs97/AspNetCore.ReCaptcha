@@ -1,11 +1,12 @@
 using System.Globalization;
 using AspNetCore.ReCaptcha;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(o => o.ResourcesPath = "Resources");
 
 // Register ReCaptcha
 builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptchaInvisible")); // Change this to "ReCaptchaInvisible" or "ReCaptchaV3" for a different version
@@ -30,6 +31,7 @@ var supportedLocales =
         .ToList();
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
+    DefaultRequestCulture = new RequestCulture("nl"),
     SupportedCultures = supportedLocales,
     SupportedUICultures = supportedLocales,
 });

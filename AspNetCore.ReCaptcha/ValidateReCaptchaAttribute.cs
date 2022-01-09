@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Resources;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 
 namespace AspNetCore.ReCaptcha
 {
@@ -15,9 +20,10 @@ namespace AspNetCore.ReCaptcha
     [ExcludeFromCodeCoverage]
     public class ValidateReCaptchaAttribute : Attribute, IFilterFactory
     {
-        public bool IsReusable => true;
+        internal const string DefaultErrorMessage = "Your request cannot be completed because you failed Recaptcha verification.";
 
-        public string ErrorMessage { get; set; } = "Your request cannot be completed because you failed Recaptcha verification.";
+        public bool IsReusable => true;
+        public string ErrorMessage { get; set; } = null;
 
         public string FormField { get; set; } = "g-recaptcha-response";
 
@@ -30,6 +36,8 @@ namespace AspNetCore.ReCaptcha
 
     public class ValidateRecaptchaFilter : IAsyncActionFilter, IAsyncPageFilter
     {
+        private static ResourceManager _resourceManager;
+
         private readonly IReCaptchaService _recaptcha;
         private readonly string _formField;
         private readonly string _modelErrorMessage;
@@ -78,15 +86,49 @@ namespace AspNetCore.ReCaptcha
         {
             if (!context.HttpContext.Request.HasFormContentType)
             {
-                context.ModelState.AddModelError("", _modelErrorMessage);
+                context.ModelState.AddModelError("", GetErrorMessage(context));
             }
             else
             {
                 _ = context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse);
                 var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
                 if (!isValid)
-                    context.ModelState.AddModelError("Recaptcha", _modelErrorMessage);
+                    context.ModelState.AddModelError("Recaptcha", GetErrorMessage(context));
             }
+        }
+
+        private string GetErrorMessage(ActionContext context)
+        {
+            var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
+            if (localizerFactory != null)
+            {
+                var settings = context.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>();
+
+                IStringLocalizer localizer = null;
+                if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+                {
+                    localizer = settings.Value.LocalizerProvider?.Invoke(controllerActionDescriptor.ControllerTypeInfo,
+                        localizerFactory);
+                }
+                else if (context.ActionDescriptor is CompiledPageActionDescriptor pageActionDescriptor)
+                {
+                    localizer = settings.Value.LocalizerProvider?.Invoke(pageActionDescriptor.HandlerTypeInfo,
+                        localizerFactory);
+                }
+
+                if (localizer != null)
+                {
+                    return localizer[_modelErrorMessage ?? ValidateReCaptchaAttribute.DefaultErrorMessage];
+                }
+            }
+
+            return _modelErrorMessage ?? GetDefaultErrorMessage();
+        }
+
+        private static string GetDefaultErrorMessage()
+        {
+            _resourceManager ??= new ResourceManager("AspNetCore.ReCaptcha.Resources.strings", typeof(ValidateReCaptchaAttribute).Assembly);
+            return _resourceManager.GetString(ValidateReCaptchaAttribute.DefaultErrorMessage);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Localization;
 
 namespace AspNetCore.ReCaptcha
 {
@@ -10,5 +12,6 @@ namespace AspNetCore.ReCaptcha
         public ReCaptchaVersion Version { get; set; }
         public bool UseRecaptchaNet { get; set; }
         public float ScoreThreshold { get; set; } = 0.5f;
+        public Func<Type, IStringLocalizerFactory, IStringLocalizer> LocalizerProvider { get; set; }
     }
 }

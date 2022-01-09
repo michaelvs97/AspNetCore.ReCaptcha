@@ -23,7 +23,7 @@ namespace AspNetCore.ReCaptcha.Tests
             {
                 httpContextMock.Setup(x => x.Request.HasFormContentType).Returns(true);
                 httpContextMock.Setup(x => x.Request.Form.TryGetValue(It.IsAny<string>(), out expected)).Returns(true);
-                
+
                 return new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
                     new Dictionary<string, object>(), Mock.Of<Controller>());
             }
@@ -49,8 +49,12 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 var expected = new StringValues("123");
 
+                var serviceProviderMock = new Mock<IServiceProvider>();
+
                 var httpContextMock = new Mock<HttpContext>();
-                
+                httpContextMock.Setup(x => x.RequestServices)
+                    .Returns(serviceProviderMock.Object);
+
                 var modelState = new ModelStateDictionary();
 
                 var actionContext = CreateActionContext(httpContextMock, modelState);
@@ -98,8 +102,12 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 var expected = new StringValues("123");
 
+                var serviceProviderMock = new Mock<IServiceProvider>();
+
                 var httpContextMock = new Mock<HttpContext>();
-                
+                httpContextMock.Setup(x => x.RequestServices)
+                    .Returns(serviceProviderMock.Object);
+
                 var pageContext = CreatePageContext(new ActionContext(httpContextMock.Object, new RouteData(), new ActionDescriptor()));
 
                 var model = new Mock<PageModel>();

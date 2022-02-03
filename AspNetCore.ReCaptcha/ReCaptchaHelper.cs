@@ -12,13 +12,31 @@ namespace AspNetCore.ReCaptcha
     [ExcludeFromCodeCoverage]
     public static class ReCaptchaHelper
     {
-        private static void AddReCaptchaServices(this IServiceCollection services)
+        private static IHttpClientBuilder AddReCaptchaServices(this IServiceCollection services)
         {
             services.PostConfigure<ReCaptchaSettings>(settings =>
             {
                 settings.LocalizerProvider ??= (modelType, localizerFactory) => localizerFactory.Create(modelType);
+
+                if (settings.UseRecaptchaNet)
+                    settings.RecaptchaBaseUrl = ReCaptchaSettings.RecaptchaNetBaseUrl;
+
+                if (!settings.RecaptchaBaseUrl.IsAbsoluteUri)
+                    throw new Exception("Invalid ReCaptcha settings, RecaptchaBaseUrl must be an absolute URI.");
+
+                if (settings.RecaptchaBaseUrl.Scheme != "https")
+                    throw new Exception("Invalid ReCaptcha settings, RecaptchaBaseUrl must use HTTPS.");
+
+                if (!settings.RecaptchaBaseUrl.AbsolutePath.EndsWith('/'))
+                    settings.RecaptchaBaseUrl = new Uri(settings.RecaptchaBaseUrl, $"{settings.RecaptchaBaseUrl.AbsolutePath}/");
             });
-            services.AddHttpClient<IReCaptchaService, ReCaptchaService>();
+
+            var httpBuilder = services.AddHttpClient<IReCaptchaService, ReCaptchaService>((sp, client) =>
+            {
+                client.BaseAddress = sp.GetRequiredService<IOptions<ReCaptchaSettings>>().Value.RecaptchaBaseUrl;
+            });
+
+            return httpBuilder;
         }
 
         public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration)
@@ -35,11 +53,28 @@ namespace AspNetCore.ReCaptcha
             return services;
         }
 
+        public static IServiceCollection AddReCaptcha(this IServiceCollection services, Action<ReCaptchaSettings> configureOptions, Action<IHttpClientBuilder> configureHttpClient)
+        {
+            services.Configure(configureOptions);
+            var httpClientBuilder = services.AddReCaptchaServices();
+            configureHttpClient(httpClientBuilder);
+            return services;
+        }
+
         public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration, Action<ReCaptchaSettings> configureOptions)
         {
             services.Configure<ReCaptchaSettings>(configuration);
             services.Configure(configureOptions);
             services.AddReCaptchaServices();
+            return services;
+        }
+
+        public static IServiceCollection AddReCaptcha(this IServiceCollection services, IConfiguration configuration, Action<ReCaptchaSettings> configureOptions, Action<IHttpClientBuilder> configureHttpClient)
+        {
+            services.Configure<ReCaptchaSettings>(configuration);
+            services.Configure(configureOptions);
+            var httpClientBuilder = services.AddReCaptchaServices();
+            configureHttpClient(httpClientBuilder);
             return services;
         }
 

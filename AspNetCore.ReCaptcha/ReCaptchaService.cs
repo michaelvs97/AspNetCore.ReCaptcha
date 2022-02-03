@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace AspNetCore.ReCaptcha
 {
-    class ReCaptchaService : IReCaptchaService
+    internal class ReCaptchaService : IReCaptchaService
     {
         private readonly HttpClient _client;
         private readonly ReCaptchaSettings _reCaptchaSettings;
@@ -36,21 +36,10 @@ namespace AspNetCore.ReCaptcha
             var body = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
                 ["secret"] = _reCaptchaSettings.SecretKey,
-                ["response"] = reCaptchaResponse
+                ["response"] = reCaptchaResponse,
             });
 
-            var url = "https://";
-            if (!_reCaptchaSettings.UseRecaptchaNet)
-            {
-                url += "www.google.com/recaptcha";
-            }
-            else
-            {
-                url += "www.recaptcha.net";
-            }
-            url += "/api/siteverify";
-
-            var result = await _client.PostAsync(url, body);
+            var result = await _client.PostAsync("api/siteverify", body);
 
             var stringResult = await result.Content.ReadAsStringAsync();
 

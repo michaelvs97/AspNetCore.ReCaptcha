@@ -8,7 +8,7 @@ namespace AspNetCore.ReCaptcha
     public class ReCaptchaSettings
     {
         internal static readonly Uri GoogleReCaptchaBaseUrl = new Uri("https://www.google.com/recaptcha/");
-        internal static readonly Uri RecaptchaNetBaseUrl = new Uri("https://www.recaptcha.net/");
+        internal static readonly Uri RecaptchaNetBaseUrl = new Uri("https://www.recaptcha.net/recaptcha/");
 
         public string SiteKey { get; set; }
         public string SecretKey { get; set; }

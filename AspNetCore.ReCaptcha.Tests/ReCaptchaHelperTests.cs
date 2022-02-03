@@ -30,7 +30,7 @@ public class ReCaptchaHelperTests
 
         Assert.Equal(ReCaptchaVersion.V2, settings.Version);
         Assert.True(settings.UseRecaptchaNet);
-        Assert.Equal("https://www.recaptcha.net/", settings.RecaptchaBaseUrl.ToString());
+        Assert.Equal("https://www.recaptcha.net/recaptcha/", settings.RecaptchaBaseUrl.ToString());
     }
 
     [Fact]

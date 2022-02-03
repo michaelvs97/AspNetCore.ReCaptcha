@@ -44,9 +44,9 @@ namespace AspNetCore.ReCaptcha
 
             var content = settings.Version switch
             {
-                ReCaptchaVersion.V2Invisible => ReCaptchaGenerator.ReCaptchaV2Invisible(settings.SiteKey, Text, ClassName, Language, Callback, Badge),
-                ReCaptchaVersion.V3 => ReCaptchaGenerator.ReCaptchaV3(settings.SiteKey, Action, Language, Callback),
-                _ => ReCaptchaGenerator.ReCaptchaV2(settings.SiteKey, Size, Theme, Language, Callback, ErrorCallback, ExpiredCallback),
+                ReCaptchaVersion.V2Invisible => ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, Text, ClassName, Language, Callback, Badge),
+                ReCaptchaVersion.V3 => ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, Action, Language, Callback),
+                _ => ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, Size, Theme, Language, Callback, ErrorCallback, ExpiredCallback),
             };
 
             output.Content.AppendHtml(content);

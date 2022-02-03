@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using System;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace AspNetCore.ReCaptcha.Tests
@@ -8,7 +9,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV2()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV2("test", "test", "test", "test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV2(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test", "test");
 
             Assert.NotNull(result);
         }
@@ -16,7 +17,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV2Invisible()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV2Invisible("test", "test", "test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV2Invisible(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test");
 
             Assert.NotNull(result);
         }
@@ -24,7 +25,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV3()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV3("test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test");
 
             Assert.NotNull(result);
         }

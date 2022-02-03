@@ -57,7 +57,10 @@ namespace AspNetCore.ReCaptcha.Tests
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
 
-            var httpClient = new HttpClient(mockHttpMessageHandler.Object);
+            var httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.google.com/recaptcha/"),
+            };
 
             var reCaptchaService = CreateService(httpClient);
 

@@ -14,6 +14,8 @@ namespace AspNetCore.ReCaptcha
     {
         private static IHttpClientBuilder AddReCaptchaServices(this IServiceCollection services)
         {
+            services.AddLogging();
+
             services.PostConfigure<ReCaptchaSettings>(settings =>
             {
                 settings.LocalizerProvider ??= (modelType, localizerFactory) => localizerFactory.Create(modelType);

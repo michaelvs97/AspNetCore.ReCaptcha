@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace AspNetCore.ReCaptcha
@@ -9,11 +10,13 @@ namespace AspNetCore.ReCaptcha
     internal class ReCaptchaService : IReCaptchaService
     {
         private readonly HttpClient _client;
+        private readonly ILogger<ReCaptchaService> _logger;
         private readonly ReCaptchaSettings _reCaptchaSettings;
 
-        public ReCaptchaService(HttpClient client, IOptions<ReCaptchaSettings> reCaptchaSettings)
+        public ReCaptchaService(HttpClient client, IOptions<ReCaptchaSettings> reCaptchaSettings, ILogger<ReCaptchaService> logger)
         {
             _client = client;
+            _logger = logger;
             _reCaptchaSettings = reCaptchaSettings.Value;
         }
 
@@ -42,8 +45,23 @@ namespace AspNetCore.ReCaptcha
             var result = await _client.PostAsync("api/siteverify", body);
 
             var stringResult = await result.Content.ReadAsStringAsync();
+            _logger?.LogTrace("recaptcha response: {recaptchaResponse}", stringResult);
 
             var obj = JsonSerializer.Deserialize<ReCaptchaResponse>(stringResult);
+
+            if (obj.ErrorCodes?.Length > 0 && _logger?.IsEnabled(LogLevel.Warning) == true)
+            {
+                for (var i = 0; i < obj.ErrorCodes.Length; i++)
+                {
+                    var errorCode = obj.ErrorCodes[i];
+                    if (errorCode.EndsWith("-input-secret"))
+                        _logger?.LogWarning("recaptcha verify returned error code {ErrorCode}, this could indicate an invalid secretkey.", errorCode);
+                    else if (errorCode.EndsWith("-input-response"))
+                        _logger?.LogDebug("recaptcha verify returned error code {ErrorCode}, this indicates the user didn't succeed the captcha.", errorCode);
+                    else
+                        _logger?.LogDebug("recaptcha verify returned error code {ErrorCode}.", errorCode);
+                }
+            }
 
             return obj;
         }

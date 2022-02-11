@@ -15,5 +15,7 @@ namespace AspNetCore.ReCaptcha
         public DateTime ChallengeTimestamp { get; set; }
         [JsonPropertyName("hostname")]
         public string Hostname { get; set; }
+        [JsonPropertyName("error-codes")]
+        public string[] ErrorCodes { get; set; }
     }
 }

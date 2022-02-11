@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
@@ -14,7 +16,7 @@ namespace AspNetCore.ReCaptcha.Tests
 {
     public class ReCaptchaServiceTests
     {
-        private ReCaptchaService CreateService(HttpClient httpClient = null, Mock<IOptions<ReCaptchaSettings>> reCaptchaSettingsMock = null)
+        private ReCaptchaService CreateService(HttpClient httpClient = null, Mock<IOptions<ReCaptchaSettings>> reCaptchaSettingsMock = null, ILogger<ReCaptchaService> logger = null)
         {
             httpClient ??= new HttpClient();
 
@@ -31,7 +33,9 @@ namespace AspNetCore.ReCaptcha.Tests
                 reCaptchaSettingsMock.Setup(x => x.Value).Returns(reCaptchaSettings);
             }
 
-            return new ReCaptchaService(httpClient, reCaptchaSettingsMock.Object);
+            logger ??= new NullLogger<ReCaptchaService>();
+
+            return new ReCaptchaService(httpClient, reCaptchaSettingsMock.Object, logger);
         }
 
         [Theory]
@@ -67,7 +71,57 @@ namespace AspNetCore.ReCaptcha.Tests
             var result = reCaptchaService.VerifyAsync("123").Result;
 
             mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(1), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
-            Assert.Equal(reCaptchaResponse.Success, result);
+            Assert.Equal(successResult, result);
+        }
+
+        [Theory]
+        [InlineData("missing-input-secret", LogLevel.Warning, "recaptcha verify returned error code missing-input-secret, this could indicate an invalid secretkey.")]
+        [InlineData("invalid-input-secret", LogLevel.Warning, "recaptcha verify returned error code invalid-input-secret, this could indicate an invalid secretkey.")]
+        [InlineData("missing-input-response", LogLevel.Debug, "recaptcha verify returned error code missing-input-response, this indicates the user didn't succeed the captcha.")]
+        [InlineData("invalid-input-response", LogLevel.Debug, "recaptcha verify returned error code invalid-input-response, this indicates the user didn't succeed the captcha.")]
+        [InlineData("bad-request", LogLevel.Debug, "recaptcha verify returned error code bad-request.")]
+        [InlineData("timeout-or-duplicate", LogLevel.Debug, "recaptcha verify returned error code timeout-or-duplicate.")]
+        public void TestVerifyWithErrorAsync(string errorCode, LogLevel expectedLogLevel, string expectedLogMessage)
+        {
+            var reCaptchaResponse = new ReCaptchaResponse()
+            {
+                Action = "Test",
+                ChallengeTimestamp = new DateTime(2022, 2, 10, 15, 14, 13),
+                Hostname = "Test",
+                Success = false,
+                ErrorCodes = new[] { errorCode }
+            };
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
+
+            var httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.google.com/recaptcha/"),
+            };
+
+            var logger = new TestLogger<ReCaptchaService>();
+
+            var reCaptchaService = CreateService(httpClient, logger: logger);
+
+            var result = reCaptchaService.VerifyAsync("123").Result;
+
+            mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(1), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+            Assert.False(reCaptchaResponse.Success);
+            Assert.False(result);
+
+            Assert.Equal(2, logger.LogEntries.Count);
+            Assert.Equal(LogLevel.Trace, logger.LogEntries[0].LogLevel);
+            Assert.Equal(@$"recaptcha response: {{""success"":false,""score"":0,""action"":""Test"",""challenge_ts"":""2022-02-10T15:14:13"",""hostname"":""Test"",""error-codes"":[""{errorCode}""]}}", logger.LogEntries[0].Message);
+
+            Assert.Equal(expectedLogLevel, logger.LogEntries[1].LogLevel);
+            Assert.Equal(expectedLogMessage, logger.LogEntries[1].Message);
         }
     }
 }

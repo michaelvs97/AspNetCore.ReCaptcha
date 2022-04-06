@@ -35,7 +35,7 @@ jobs:
     - name: Publish NuGet
       id: publish_nuget
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/master'
-      uses: brandedoutcast/publish-nuget@v2.5.5
+      uses: alirezanet/publish-nuget@v3.0.3
       with:
         PROJECT_FILE_PATH: AspNetCore.ReCaptcha/AspNetCore.ReCaptcha.csproj
         PACKAGE_NAME: AspNetCore.ReCaptcha

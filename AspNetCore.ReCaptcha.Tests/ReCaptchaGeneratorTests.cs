@@ -25,7 +25,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV3()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", 1);
 
             Assert.NotNull(result);
         }

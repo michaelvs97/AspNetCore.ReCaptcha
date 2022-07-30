@@ -1,10 +1,23 @@
 using System;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetCore.ReCaptcha
 {
     internal static class ReCaptchaGenerator
     {
+        private static string ViewDataKey = "__ReCaptchaGeneratedId";
+
+        public static int GenerateId(ViewContext viewContext)
+        {
+            var id = 0;
+            if (viewContext.ViewData.TryGetValue(ViewDataKey, out var value) && value is int _id)
+                id = _id;
+
+            viewContext.ViewData[ViewDataKey] = ++id;
+            return id;
+        }
+
         public static IHtmlContent ReCaptchaV2(Uri baseUrl, string siteKey, string size, string theme, string language, string callback, string errorCallback, string expiredCallback)
         {
             var content = new HtmlContentBuilder();
@@ -43,15 +56,15 @@ namespace AspNetCore.ReCaptcha
             return content;
         }
 
-        public static IHtmlContent ReCaptchaV3(Uri baseUrl, string siteKey, string action, string language, string callBack)
+        public static IHtmlContent ReCaptchaV3(Uri baseUrl, string siteKey, string action, string language, string callBack, int id)
         {
             var content = new HtmlContentBuilder();
-            content.AppendHtml(@"<input id=""g-recaptcha-response"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
+            content.AppendHtml(@$"<input id=""g-recaptcha-response-{id}"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
             content.AppendFormat(@"<script src=""{0}api.js?render={1}&hl={2}""></script>", baseUrl, siteKey, language);
             content.AppendHtml("<script>");
             content.AppendHtml("function updateReCaptcha() {");
             content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);
-            content.AppendHtml("document.getElementById('g-recaptcha-response').value = token;");
+            content.AppendHtml($"document.getElementById('g-recaptcha-response-{id}').value = token;");
             content.AppendHtml("});");
             content.AppendHtml("}");
             content.AppendHtml("grecaptcha.ready(function() {setInterval(updateReCaptcha, 100000); updateReCaptcha()});");

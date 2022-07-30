@@ -129,7 +129,7 @@ namespace AspNetCore.ReCaptcha
                 case ReCaptchaVersion.V2Invisible:
                     return ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
                 case ReCaptchaVersion.V3:
-                    return ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback);
+                    return ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext));
             }
         }
     }

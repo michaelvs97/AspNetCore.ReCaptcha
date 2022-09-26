@@ -22,7 +22,15 @@ namespace AspNetCore.ReCaptcha
     {
         internal const string DefaultErrorMessage = "Your request cannot be completed because you failed Recaptcha verification.";
 
+        public ValidateReCaptchaAttribute(string action = null)
+        {
+            Action = action;
+        }
+
         public bool IsReusable => true;
+
+        public string Action { get; set; } = null;
+
         public string ErrorMessage { get; set; } = null;
 
         public string FormField { get; set; } = "g-recaptcha-response";
@@ -30,7 +38,7 @@ namespace AspNetCore.ReCaptcha
         public IFilterMetadata CreateInstance(IServiceProvider services)
         {
             var recaptchaService = services.GetService<IReCaptchaService>();
-            return new ValidateRecaptchaFilter(recaptchaService, FormField, ErrorMessage);
+            return new ValidateRecaptchaFilter(recaptchaService, Action, FormField, ErrorMessage);
         }
     }
 
@@ -39,12 +47,14 @@ namespace AspNetCore.ReCaptcha
         private static ResourceManager _resourceManager;
 
         private readonly IReCaptchaService _recaptcha;
+        private readonly string _action;
         private readonly string _formField;
         private readonly string _modelErrorMessage;
 
-        public ValidateRecaptchaFilter(IReCaptchaService recaptcha, string formField, string modelErrorMessage)
+        public ValidateRecaptchaFilter(IReCaptchaService recaptcha, string action, string formField, string modelErrorMessage)
         {
             _recaptcha = recaptcha;
+            _action = action;
             _formField = formField;
             _modelErrorMessage = modelErrorMessage;
         }
@@ -91,7 +101,7 @@ namespace AspNetCore.ReCaptcha
             else
             {
                 _ = context.HttpContext.Request.Form.TryGetValue(_formField, out var reCaptchaResponse);
-                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse);
+                var isValid = await _recaptcha.VerifyAsync(reCaptchaResponse, _action);
                 if (!isValid)
                     context.ModelState.AddModelError("Recaptcha", GetErrorMessage(context));
             }

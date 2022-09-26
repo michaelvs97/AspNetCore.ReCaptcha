@@ -9,7 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddLocalization(o => o.ResourcesPath = "Resources");
 
 // Register ReCaptcha
-builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptchaInvisible")); // Change this to "ReCaptchaInvisible" or "ReCaptchaV3" for a different version
+builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptchaV3")); // Change this to "ReCaptchaInvisible" or "ReCaptchaV3" for a different version
 
 var app = builder.Build();
 

@@ -62,12 +62,12 @@ namespace AspNetCore.ReCaptcha
             content.AppendHtml(@$"<input id=""g-recaptcha-response-{id}"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
             content.AppendFormat(@"<script src=""{0}api.js?render={1}&hl={2}""></script>", baseUrl, siteKey, language);
             content.AppendHtml("<script>");
-            content.AppendHtml("function updateReCaptcha() {");
+            content.AppendHtml($"function updateReCaptcha{id}() {{");
             content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);
             content.AppendHtml($"document.getElementById('g-recaptcha-response-{id}').value = token;");
             content.AppendHtml("});");
             content.AppendHtml("}");
-            content.AppendHtml("grecaptcha.ready(function() {setInterval(updateReCaptcha, 100000); updateReCaptcha()});");
+            content.AppendHtml($"grecaptcha.ready(function() {{setInterval(updateReCaptcha{id}, 100000); updateReCaptcha{id}()}});");
             content.AppendHtml("</script>");
             content.AppendLine();
 

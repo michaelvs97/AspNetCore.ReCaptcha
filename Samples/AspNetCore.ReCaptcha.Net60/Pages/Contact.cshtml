@@ -59,3 +59,41 @@ function submitForm() {
         </div>
     }
 </form>
+
+<form method="post">
+    <div asp-validation-summary="All"></div>
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <textarea asp-for="Body" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        @switch (ReCaptchaSettings.Value.Version)
+        {
+            case ReCaptchaVersion.V2:
+                // Optionally override language of the recaptcha
+                // @Html.ReCaptcha(language: "en")
+                <recaptcha />
+                break;
+            case ReCaptchaVersion.V2Invisible:
+                <recaptcha class-name="btn btn-primary" callback="submitForm" text="Submit Invisible ReCaptcha" />
+                break;
+            case ReCaptchaVersion.V3:
+                <recaptcha action="contact" />
+                break;
+        }
+    </div>
+
+    @if (ReCaptchaSettings.Value.Version != ReCaptchaVersion.V2Invisible)
+    {
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary"/>
+        </div>
+    }
+</form>

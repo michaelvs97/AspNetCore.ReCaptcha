@@ -9,7 +9,7 @@ namespace AspNetCore.ReCaptcha
         /// </summary>
         /// <param name="reCaptchaResponse">ReCaptcha Response as given by the widget.</param>
         /// <returns>Returns whether the recaptcha validation was successful or not.</returns>
-        Task<bool> VerifyAsync(string reCaptchaResponse);
+        Task<bool> VerifyAsync(string reCaptchaResponse, string action = null);
 
         /// <summary>
         /// Verifies provided ReCaptcha Response.

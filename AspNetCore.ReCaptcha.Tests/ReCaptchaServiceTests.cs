@@ -16,22 +16,22 @@ namespace AspNetCore.ReCaptcha.Tests
 {
     public class ReCaptchaServiceTests
     {
-        private ReCaptchaService CreateService(HttpClient httpClient = null, Mock<IOptions<ReCaptchaSettings>> reCaptchaSettingsMock = null, ILogger<ReCaptchaService> logger = null)
+        private ReCaptchaService CreateService(HttpClient httpClient = null, ReCaptchaSettings reCaptchaSettings = null, ILogger<ReCaptchaService> logger = null)
         {
             httpClient ??= new HttpClient();
 
-            if (reCaptchaSettingsMock == null)
+            if (reCaptchaSettings == null)
             {
-                var reCaptchaSettings = new ReCaptchaSettings()
+                reCaptchaSettings = new ReCaptchaSettings()
                 {
                     SecretKey = "123",
                     SiteKey = "123",
                     Version = ReCaptchaVersion.V2
                 };
-
-                reCaptchaSettingsMock = new Mock<IOptions<ReCaptchaSettings>>();
-                reCaptchaSettingsMock.Setup(x => x.Value).Returns(reCaptchaSettings);
             }
+
+            var reCaptchaSettingsMock = new Mock<IOptions<ReCaptchaSettings>>();
+            reCaptchaSettingsMock.Setup(x => x.Value).Returns(reCaptchaSettings);
 
             logger ??= new NullLogger<ReCaptchaService>();
 
@@ -122,6 +122,133 @@ namespace AspNetCore.ReCaptcha.Tests
 
             Assert.Equal(expectedLogLevel, logger.LogEntries[1].LogLevel);
             Assert.Equal(expectedLogMessage, logger.LogEntries[1].Message);
+        }
+
+        [Fact]
+        public void TestVerifyWithActionReturnsFalseIfInvalidAction()
+        {
+            var reCaptchaResponse = new ReCaptchaResponse()
+            {
+                Action = "Test",
+                ChallengeTimestamp = new DateTime(2022, 2, 10, 15, 14, 13),
+                Hostname = "Test",
+                Success = true,
+                Score = 1.0,
+            };
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
+
+            var httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.google.com/recaptcha/"),
+            };
+
+            var logger = new TestLogger<ReCaptchaService>();
+
+            var reCaptchaService = CreateService(httpClient, logger: logger, reCaptchaSettings: new ReCaptchaSettings
+            {
+                Version = ReCaptchaVersion.V3,
+            });
+
+            var result = reCaptchaService.VerifyAsync("123", "Test2").Result;
+
+            mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(1), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void TestVerifyWithActionReturnsFalseIfScoreLessThanActionThreshold()
+        {
+            var reCaptchaResponse = new ReCaptchaResponse()
+            {
+                Action = "Test",
+                ChallengeTimestamp = new DateTime(2022, 2, 10, 15, 14, 13),
+                Hostname = "Test",
+                Success = true,
+                Score = 0.7,
+            };
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
+
+            var httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.google.com/recaptcha/"),
+            };
+
+            var logger = new TestLogger<ReCaptchaService>();
+
+            var reCaptchaService = CreateService(httpClient, logger: logger, reCaptchaSettings: new ReCaptchaSettings
+            {
+                Version = ReCaptchaVersion.V3,
+                ScoreThreshold = 0.5,
+                ActionThresholds =
+                {
+                    ["Test"] = 0.8,
+                },
+            });
+
+            var result = reCaptchaService.VerifyAsync("123", "Test").Result;
+
+            mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(1), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void TestVerifyWithAction()
+        {
+            var reCaptchaResponse = new ReCaptchaResponse()
+            {
+                Action = "Test",
+                ChallengeTimestamp = new DateTime(2022, 2, 10, 15, 14, 13),
+                Hostname = "Test",
+                Success = true,
+                Score = 1.0,
+            };
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(JsonSerializer.Serialize(reCaptchaResponse), Encoding.UTF8,"application/json")});
+
+            var httpClient = new HttpClient(mockHttpMessageHandler.Object)
+            {
+                BaseAddress = new Uri("https://www.google.com/recaptcha/"),
+            };
+
+            var logger = new TestLogger<ReCaptchaService>();
+
+            var reCaptchaService = CreateService(httpClient, logger: logger, reCaptchaSettings: new ReCaptchaSettings
+            {
+                Version = ReCaptchaVersion.V3,
+                ScoreThreshold = 0.5,
+                ActionThresholds =
+                {
+                    ["Test"] = 0.8,
+                },
+            });
+
+            var result = reCaptchaService.VerifyAsync("123", "Test").Result;
+
+            mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(1), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+            Assert.True(result);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Localization;
 
@@ -15,6 +16,7 @@ namespace AspNetCore.ReCaptcha
         public ReCaptchaVersion Version { get; set; }
         public bool UseRecaptchaNet { get; set; }
         public double ScoreThreshold { get; set; } = 0.5;
+        public Dictionary<string, double> ActionThresholds { get; set; } = new Dictionary<string, double>();
         public Func<Type, IStringLocalizerFactory, IStringLocalizer> LocalizerProvider { get; set; }
         public Uri RecaptchaBaseUrl { get; set; } = GoogleReCaptchaBaseUrl;
     }

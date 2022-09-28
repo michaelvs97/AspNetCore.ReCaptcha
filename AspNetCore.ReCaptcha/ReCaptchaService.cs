@@ -21,13 +21,25 @@ namespace AspNetCore.ReCaptcha
         }
 
         /// <inheritdoc />
-        public async Task<bool> VerifyAsync(string reCaptchaResponse)
+        public async Task<bool> VerifyAsync(string reCaptchaResponse, string action = null)
         {
             var obj = await GetVerifyResponseAsync(reCaptchaResponse);
 
             if (_reCaptchaSettings.Version == ReCaptchaVersion.V3)
             {
-                return obj.Success && obj.Score >= _reCaptchaSettings.ScoreThreshold;
+                if (!obj.Success)
+                    return false;
+
+                if (!string.IsNullOrEmpty(action))
+                {
+                    if (action != obj.Action)
+                        return false;
+
+                    if (_reCaptchaSettings.ActionThresholds.TryGetValue(action, out var threshold))
+                        return obj.Score >= threshold;
+                }
+
+                return obj.Score >= _reCaptchaSettings.ScoreThreshold;
             }
 
             return obj.Success;

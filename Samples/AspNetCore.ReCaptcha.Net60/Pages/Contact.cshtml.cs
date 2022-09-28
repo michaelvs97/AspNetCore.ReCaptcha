@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AspNetCore.ReCaptcha.Net60.Pages;
 
-[ValidateReCaptcha]
+[ValidateReCaptcha("contact")]
 public class ContactModel : PageModel
 {
     [BindProperty]

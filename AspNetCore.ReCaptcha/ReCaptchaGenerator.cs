@@ -18,7 +18,21 @@ namespace AspNetCore.ReCaptcha
             return id;
         }
 
-        public static IHtmlContent ReCaptchaV2(Uri baseUrl, string siteKey, string size, string theme, string language, string callback, string errorCallback, string expiredCallback)
+        /// <summary>
+        /// Renders the Google ReCaptcha v2 HTML.
+        /// </summary>
+        /// <param name="baseUrl">The base URL where the Google Recaptcha JS script is hosted.</param>
+        /// <param name="siteKey">The site key.</param>
+        /// <param name="size">Optional parameter, contains the size of the widget.</param>
+        /// <param name="theme">Google Recaptcha theme default is light.</param>
+        /// <param name="language">Google Recaptcha <a href="https://developers.google.com/recaptcha/docs/language">Language Code</a></param>
+        /// <param name="callback">Google ReCaptcha success callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="errorCallback">Google ReCaptcha error callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="autoTheme">Indicates whether the theme is automatically set to 'dark' based on the user's system settings.</param>
+        /// <returns></returns>
+        public static IHtmlContent ReCaptchaV2(Uri baseUrl, string siteKey, string size, string theme, string language, 
+            string callback, string errorCallback, string expiredCallback, bool autoTheme = false)
         {
             var content = new HtmlContentBuilder();
             content.AppendFormat(@"<div class=""g-recaptcha"" data-sitekey=""{0}""", siteKey);
@@ -37,6 +51,13 @@ namespace AspNetCore.ReCaptcha
             content.AppendFormat("></div>");
             content.AppendLine();
             content.AppendFormat(@"<script src=""{0}api.js?hl={1}"" defer></script>", baseUrl, language);
+
+            if (autoTheme)
+            {
+                content
+                    .AppendLine()
+                    .AppendHtmlLine("<script>window.matchMedia('(prefers-color-scheme: dark)').matches&&document.querySelector('.g-recaptcha').setAttribute('data-theme','dark');</script>");
+            }
 
             return content;
         }

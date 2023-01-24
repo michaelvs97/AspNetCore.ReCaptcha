@@ -29,5 +29,38 @@ namespace AspNetCore.ReCaptcha.Tests
 
             Assert.NotNull(result);
         }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void ReCaptchaV2ConsidersAutoThemeArgument(bool autoTheme, bool expectScript)
+        {
+            // Arrange
+            var baseUrl = new Uri("https://www.google.com/recaptcha/");
+            const string siteKey = "test";
+            const string size = "test";
+            const string theme = "test";
+            const string language = "test";
+            const string callback = "test";
+            const string errorCallback = "test";
+            const string expiredCallback = "test";
+
+            // Act
+            IHtmlContent htmlContent = ReCaptchaGenerator.ReCaptchaV2(baseUrl, siteKey, size, theme, language, 
+                callback, errorCallback, expiredCallback, autoTheme);
+
+            // Assert
+            Assert.NotNull(htmlContent);
+            string htmlString = htmlContent.ToHtmlString();
+            const string mediaQueryString = "prefers-color-scheme";
+            if (expectScript)
+            {
+                Assert.Contains(mediaQueryString, htmlString);
+            }
+            else
+            {
+                Assert.DoesNotContain(mediaQueryString, htmlString);
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ public class ReCaptchaTagHelperTests
     [Theory]
     [InlineData(true, true)]
     [InlineData(false, false)]
-    public void ProcessConsideredEnabledSetting(bool enabled, bool expectModified)
+    public void ProcessConsidersEnabledSetting(bool enabled, bool expectModified)
     {
         // Arrange
         TagHelperContext tagHelperContext = CreateTagHelperContext();

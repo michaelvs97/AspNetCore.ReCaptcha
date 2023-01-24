@@ -19,5 +19,11 @@ namespace AspNetCore.ReCaptcha
         public Dictionary<string, double> ActionThresholds { get; set; } = new Dictionary<string, double>();
         public Func<Type, IStringLocalizerFactory, IStringLocalizer> LocalizerProvider { get; set; }
         public Uri RecaptchaBaseUrl { get; set; } = GoogleReCaptchaBaseUrl;
+
+        /// <summary>
+        /// Determines whether Google reCAPTCHA is enabled / enforced. Defaults to <code>true</code> for backward
+        /// compatibility with existing application deployments.
+        /// </summary>
+        public bool Enabled { get; set; } = true;
     }
 }

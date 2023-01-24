@@ -38,7 +38,8 @@ namespace AspNetCore.ReCaptcha
         public IFilterMetadata CreateInstance(IServiceProvider services)
         {
             var recaptchaService = services.GetService<IReCaptchaService>();
-            return new ValidateRecaptchaFilter(recaptchaService, Action, FormField, ErrorMessage);
+            var reCaptchaSettingsSnapshot = services.GetService<IOptionsSnapshot<ReCaptchaSettings>>();
+            return new ValidateRecaptchaFilter(recaptchaService, Action, FormField, ErrorMessage, reCaptchaSettingsSnapshot);
         }
     }
 
@@ -50,13 +51,22 @@ namespace AspNetCore.ReCaptcha
         private readonly string _action;
         private readonly string _formField;
         private readonly string _modelErrorMessage;
+        private readonly ReCaptchaSettings _reCaptchaSettings;
 
-        public ValidateRecaptchaFilter(IReCaptchaService recaptcha, string action, string formField, string modelErrorMessage)
+        public ValidateRecaptchaFilter(IReCaptchaService recaptcha, string action, string formField, string modelErrorMessage,
+            IOptionsSnapshot<ReCaptchaSettings> reCaptchaSettingsSnapshot)
         {
             _recaptcha = recaptcha;
             _action = action;
             _formField = formField;
             _modelErrorMessage = modelErrorMessage;
+
+            if (reCaptchaSettingsSnapshot is null)
+            {
+                throw new ArgumentNullException(nameof(reCaptchaSettingsSnapshot));
+            }
+            
+            _reCaptchaSettings = reCaptchaSettingsSnapshot.Value;
         }
 
         /// <summary>
@@ -94,6 +104,12 @@ namespace AspNetCore.ReCaptcha
 
         private async Task ValidateRecaptcha(ActionContext context)
         {
+            if (!_reCaptchaSettings.Enabled)
+            {
+                // Nothing to do - reCAPTCHA is not enabled / enforced.
+                return;
+            }
+            
             if (!context.HttpContext.Request.HasFormContentType)
             {
                 context.ModelState.AddModelError("", GetErrorMessage(context));

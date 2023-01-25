@@ -44,7 +44,7 @@ namespace AspNetCore.ReCaptcha
             if (Id.ToLower() == "submit")
                 throw new ArgumentException("id can't be named submit");
 
-            var settings = ViewContext.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>().Value;
+            var settings = ViewContext.HttpContext.RequestServices.GetRequiredService<IOptionsSnapshot<ReCaptchaSettings>>().Value;
 
             if (!settings.Enabled)
             {

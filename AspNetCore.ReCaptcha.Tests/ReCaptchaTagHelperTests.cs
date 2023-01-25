@@ -28,7 +28,7 @@ public class ReCaptchaTagHelperTests
         var reCaptchaSettingsSnapshot = mockReCaptchaSettingsSnapshot.Object;
         
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddSingleton<IOptions<ReCaptchaSettings>>(reCaptchaSettingsSnapshot);
+        serviceCollection.AddSingleton(reCaptchaSettingsSnapshot);
 
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 

@@ -24,6 +24,12 @@ namespace AspNetCore.ReCaptcha
         public string ErrorCallback { get; set; } = null;
         public string ExpiredCallback { get; set; } = null;
 
+        /// <summary>
+        /// Indicates whether the theme is automatically set to 'dark' based on the user's system settings.
+        /// </summary>
+        [HtmlAttributeName("auto-theme")]
+        public bool AutoTheme { get; set; }
+
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
@@ -46,7 +52,7 @@ namespace AspNetCore.ReCaptcha
             {
                 ReCaptchaVersion.V2Invisible => ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, Text, ClassName, Language, Callback, Badge),
                 ReCaptchaVersion.V3 => ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, Action, Language, Callback, ReCaptchaGenerator.GenerateId(ViewContext)),
-                _ => ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, Size, Theme, Language, Callback, ErrorCallback, ExpiredCallback),
+                _ => ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, Size, Theme, Language, Callback, ErrorCallback, ExpiredCallback, AutoTheme),
             };
 
             output.Content.AppendHtml(content);

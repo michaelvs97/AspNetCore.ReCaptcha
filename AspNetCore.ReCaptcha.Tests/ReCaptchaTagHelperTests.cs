@@ -56,6 +56,34 @@ public class ReCaptchaTagHelperTests
     [Theory]
     [InlineData(true, true)]
     [InlineData(false, false)]
+    public void ProcessConsidersAutoThemeSetting(bool autoTheme, bool expectScript)
+    {
+        // Arrange
+        TagHelperContext tagHelperContext = CreateTagHelperContext();
+        TagHelperOutput tagHelperOutput = CreateTagHelperOutput();
+
+        _reCaptchaTagHelper.AutoTheme = autoTheme;
+
+        // Act
+        _reCaptchaTagHelper.Process(tagHelperContext, tagHelperOutput);
+
+        // Assert
+        Assert.True(tagHelperOutput.Content.IsModified);
+        string htmlString = tagHelperOutput.Content.GetContent();
+        const string mediaQueryString = "prefers-color-scheme";
+        if (expectScript)
+        {
+            Assert.Contains(mediaQueryString, htmlString);
+        }
+        else
+        {
+            Assert.DoesNotContain(mediaQueryString, htmlString);
+        }
+    }
+    
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
     public void ProcessConsidersEnabledSetting(bool enabled, bool expectModified)
     {
         // Arrange
@@ -66,7 +94,7 @@ public class ReCaptchaTagHelperTests
 
         // Act
         _reCaptchaTagHelper.Process(tagHelperContext, tagHelperOutput);
-        
+
         // Assert
         Assert.Equal(expectModified, tagHelperOutput.Content.IsModified);
     }

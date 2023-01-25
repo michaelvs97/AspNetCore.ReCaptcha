@@ -95,6 +95,7 @@ namespace AspNetCore.ReCaptcha
         /// <param name="callback">Google ReCaptcha success callback method. Used in v2 ReCaptcha.</param>
         /// <param name="errorCallback">Google ReCaptcha error callback method. Used in v2 ReCaptcha.</param>
         /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
+        /// <param name="autoTheme">Indicates whether the theme is automatically set to 'dark' based on the user's system settings.</param>
         /// <returns>HtmlString with Recaptcha elements</returns>
         public static IHtmlContent ReCaptcha(
             this IHtmlHelper helper,
@@ -108,7 +109,8 @@ namespace AspNetCore.ReCaptcha
             string badge = "bottomright",
             string callback = null,
             string errorCallback = null,
-            string expiredCallback = null)
+            string expiredCallback = null,
+            bool autoTheme = false)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException("id can't be null");
@@ -125,7 +127,7 @@ namespace AspNetCore.ReCaptcha
             {
                 default:
                 case ReCaptchaVersion.V2:
-                    return ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback);
+                    return ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme);
                 case ReCaptchaVersion.V2Invisible:
                     return ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
                 case ReCaptchaVersion.V3:

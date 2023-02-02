@@ -22,6 +22,19 @@ namespace AspNetCore.ReCaptcha.Tests
 {
     public class ValidateReCaptchaAttributeTests
     {
+        private readonly IOptionsSnapshot<ReCaptchaSettings> _reCaptchaSettingsSnapshot;
+        private readonly ReCaptchaSettings _reCaptchaSettings;
+
+        public ValidateReCaptchaAttributeTests()
+        {
+            _reCaptchaSettings = new ReCaptchaSettings();
+
+            var mockReCaptchaSettingsSnapshot = new Mock<IOptionsSnapshot<ReCaptchaSettings>>();
+            mockReCaptchaSettingsSnapshot.Setup(m => m.Value)
+                .Returns(_reCaptchaSettings);
+            _reCaptchaSettingsSnapshot = mockReCaptchaSettingsSnapshot.Object;
+        }
+        
         public class OnActionExecutionAsync : ValidateReCaptchaAttributeTests
         {
             private static ActionExecutingContext CreateActionExecutingContext(Mock<HttpContext> httpContextMock, ActionContext actionContext, StringValues expected)
@@ -50,7 +63,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), null)).Returns(Task.FromResult(success));
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "");
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "", _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 
@@ -83,6 +96,55 @@ namespace AspNetCore.ReCaptcha.Tests
                     Assert.Equal(1, modelState.ErrorCount);
             }
 
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            public async Task VerifyAsyncConsidersEnabledFlag(bool enabled, bool expectSuccess)
+            {
+                // Arrange
+                _reCaptchaSettings.Enabled = enabled;
+                
+                var reCaptchaServiceMock = new Mock<IReCaptchaService>();
+
+                reCaptchaServiceMock.Setup(x => 
+                    x.VerifyAsync(It.IsAny<string>(), null))
+                    .ReturnsAsync(false);
+
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "", 
+                    _reCaptchaSettingsSnapshot);
+
+                var expected = new StringValues("123");
+
+                var serviceProviderMock = new Mock<IServiceProvider>();
+
+                var httpContextMock = new Mock<HttpContext>();
+                httpContextMock.Setup(x => x.RequestServices)
+                    .Returns(serviceProviderMock.Object);
+
+                var modelState = new ModelStateDictionary();
+
+                var actionDescriptor = new ControllerActionDescriptor
+                {
+                    ControllerTypeInfo = typeof(ValidateReCaptchaAttributeTests).GetTypeInfo(),
+                };
+
+                var actionContext = CreateActionContext(httpContextMock, modelState, actionDescriptor);
+
+                var actionExecutingContext = CreateActionExecutingContext(httpContextMock, actionContext, expected);
+
+                Task<ActionExecutedContext> Next()
+                {
+                    var ctx = new ActionExecutedContext(actionContext, new List<IFilterMetadata>(), Mock.Of<Controller>());
+                    return Task.FromResult(ctx);
+                }
+
+                // Act
+                await filter.OnActionExecutionAsync(actionExecutingContext, Next);
+                
+                // Assert
+                Assert.Equal(expectSuccess ? 0 : 1, modelState.ErrorCount);
+            }
+
             [Fact]
             public async Task VerifyAsyncLocalizesErrorMessage()
             {
@@ -90,7 +152,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), null)).Returns(Task.FromResult(false));
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", null);
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", null, _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 
@@ -145,7 +207,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), "action")).ReturnsAsync(true);
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, "action", "", "");
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, "action", "", "", _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 
@@ -202,7 +264,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), null)).Returns(Task.FromResult(success));
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "");
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "", _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 
@@ -230,6 +292,52 @@ namespace AspNetCore.ReCaptcha.Tests
                 reCaptchaServiceMock.Verify(x => x.VerifyAsync(It.IsAny<string>(), null), Times.Once);
             }
 
+            [Theory]
+            [InlineData(true, false)]
+            [InlineData(false, true)]
+            public async Task VerifyAsyncConsidersEnabledFlag(bool enabled, bool expectSuccess)
+            {
+                // Arrange
+                _reCaptchaSettings.Enabled = enabled;
+                
+                var reCaptchaServiceMock = new Mock<IReCaptchaService>();
+
+                reCaptchaServiceMock.Setup(x => 
+                    x.VerifyAsync(It.IsAny<string>(), null))
+                    .ReturnsAsync(false);
+
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "", _reCaptchaSettingsSnapshot);
+
+                var expected = new StringValues("123");
+
+                var serviceProviderMock = new Mock<IServiceProvider>();
+
+                var httpContextMock = new Mock<HttpContext>();
+                httpContextMock.Setup(x => x.RequestServices)
+                    .Returns(serviceProviderMock.Object);
+
+                var pageContext = CreatePageContext(new ActionContext(httpContextMock.Object, new RouteData(), new ActionDescriptor()));
+
+                var model = new Mock<PageModel>();
+
+                var pageHandlerExecutedContext = new PageHandlerExecutedContext(
+                    pageContext,
+                    Array.Empty<IFilterMetadata>(),
+                    new HandlerMethodDescriptor(),
+                    model.Object);
+
+                var actionExecutingContext = CreatePageHandlerExecutingContext(httpContextMock, pageContext, expected, model);
+
+                Task<PageHandlerExecutedContext> Next() => Task.FromResult(pageHandlerExecutedContext);
+
+                // Act
+                await filter.OnPageHandlerExecutionAsync(actionExecutingContext, Next);
+                
+                // Assert
+                ModelStateDictionary modelState = actionExecutingContext.ModelState;
+                Assert.Equal(expectSuccess ? 0 : 1, modelState.ErrorCount);
+            }
+
             [Fact]
             public async Task VerifyAsyncLocalizesErrorMessage()
             {
@@ -237,7 +345,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), null)).Returns(Task.FromResult(false));
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "Custom Error Message");
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, null, "", "Custom Error Message", _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 
@@ -296,7 +404,7 @@ namespace AspNetCore.ReCaptcha.Tests
 
                 reCaptchaServiceMock.Setup(x => x.VerifyAsync(It.IsAny<string>(), "action")).Returns(Task.FromResult(true));
 
-                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, "action", "", "Custom Error Message");
+                var filter = new ValidateRecaptchaFilter(reCaptchaServiceMock.Object, "action", "", "Custom Error Message", _reCaptchaSettingsSnapshot);
 
                 var expected = new StringValues("123");
 

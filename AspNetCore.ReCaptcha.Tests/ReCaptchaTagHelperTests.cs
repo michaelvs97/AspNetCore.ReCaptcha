@@ -28,7 +28,7 @@ public class ReCaptchaTagHelperTests
         var reCaptchaSettingsSnapshot = mockReCaptchaSettingsSnapshot.Object;
         
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddSingleton<IOptions<ReCaptchaSettings>>(reCaptchaSettingsSnapshot);
+        serviceCollection.AddSingleton(reCaptchaSettingsSnapshot);
 
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -66,7 +66,7 @@ public class ReCaptchaTagHelperTests
 
         // Act
         _reCaptchaTagHelper.Process(tagHelperContext, tagHelperOutput);
-        
+
         // Assert
         Assert.True(tagHelperOutput.Content.IsModified);
         string htmlString = tagHelperOutput.Content.GetContent();
@@ -79,6 +79,24 @@ public class ReCaptchaTagHelperTests
         {
             Assert.DoesNotContain(mediaQueryString, htmlString);
         }
+    }
+    
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    public void ProcessConsidersEnabledSetting(bool enabled, bool expectModified)
+    {
+        // Arrange
+        TagHelperContext tagHelperContext = CreateTagHelperContext();
+        TagHelperOutput tagHelperOutput = CreateTagHelperOutput();
+
+        _reCaptchaSettings.Enabled = enabled;
+
+        // Act
+        _reCaptchaTagHelper.Process(tagHelperContext, tagHelperOutput);
+
+        // Assert
+        Assert.Equal(expectModified, tagHelperOutput.Content.IsModified);
     }
 
     private static TagHelperOutput CreateTagHelperOutput()

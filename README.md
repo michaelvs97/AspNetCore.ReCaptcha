@@ -2,7 +2,7 @@
 [![NuGet Version](http://img.shields.io/nuget/v/AspNetCore.ReCaptcha.svg?style=flat)](https://www.nuget.org/packages/AspNetCore.ReCaptcha/) 
 [![Coverage Status](https://coveralls.io/repos/github/michaelvs97/AspNetCore.ReCaptcha/badge.svg?branch=master)](https://coveralls.io/github/michaelvs97/AspNetCore.ReCaptcha?branch=master)
 
-ReCAPTCHA Library for .NET Core 3.1 and .NET 5.0/6.0.
+ReCAPTCHA Library for .NET 6 and above.
 
 ## Requirements
 This package requires a secret key as well as a site key provided by ReCaptcha. You can aquire your keyset at [https://www.google.com/recaptcha/intro/v3.html](https://www.google.com/recaptcha/intro/v3.html). It's possible to use either v2 or v3 ReCaptcha.
@@ -34,17 +34,9 @@ Place the aquired secret key and site key in the appsettings.json of your projec
 ```
 
 ## Usage
-To use AspNetCore.ReCaptcha in your project, you must add the following code to your startup.cs:
+To use AspNetCore.ReCaptcha in your project, you must add the ReCaptcha services to the service container like so:
 
 ```C#
-public void ConfigureServices(IServiceCollection services) {
-    services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
-}
-```
-
-or if you are using the new minimal API in .NET 6.0 add this to your program.cs instead:
-
-```csharp
 builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptcha"));
 ```
 
@@ -97,18 +89,15 @@ This will only change the language of the recaptcha widget that is shown, not th
 
 To localize the error message (e.g. the message set with `[ValidateReCaptcha(ErrorMessage = "")]`), add the message
 to the resource file of the controller or razor page that the validate attribute is used. For an example of this check
-the [.NET 6 sample](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)
+the [Razor Pages sample](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.RazorPages)
 and look at the Pages/ContactModel.cs and Resources/Pages/ContactModel.resx files.
 
-You can learn more about request localization in .NET Core [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-3.1)
+You can learn more about request localization in ASP.NET Core [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-8.0)
 
 ## Examples
-For every supported version of .NET there is a configured example included in this repository.
-As of .NET 5.0, we support both MVC and Razor pages. The .NET 6.0 example is using the new minimal API.
-Examples are linked below for quick access:
+The two sample projects show two different use cases of using the library. One is using the MVC pattern, the other
+uses the Razor Pages pattern. The sample with Razor Pages is also configured with request localization.
 
-[.NET Core 3.1](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.NetCore31)
+[MVC](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Mvc)
 
-[.NET 5.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net50)
-
-[.NET 6.0](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.Net60)
+[Razor Pages](https://github.com/michaelvs97/AspNetCore.ReCaptcha/tree/master/Samples/AspNetCore.ReCaptcha.RazorPages)

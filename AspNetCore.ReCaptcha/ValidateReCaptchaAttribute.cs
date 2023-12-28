@@ -109,7 +109,7 @@ namespace AspNetCore.ReCaptcha
                 // Nothing to do - reCAPTCHA is not enabled / enforced.
                 return;
             }
-            
+
             if (!context.HttpContext.Request.HasFormContentType)
             {
                 context.ModelState.AddModelError("", GetErrorMessage(context));

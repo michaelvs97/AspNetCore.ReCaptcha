@@ -1,23 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <PackageId>AspNetCore.ReCaptcha</PackageId>
-    <Version>1.7.0</Version>
+    <Version>1.8.0</Version>
     <Authors>Michaelvs97,sleeuwen</Authors>
-    <Description>Google ReCAPTCHA v2/v3 Library for .NET Core 3.1 and .NET 5.0/6.0</Description>
-    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET Core 3.1 and .NET 5.0/6.0</PackageDescription>
+    <Description>Google ReCAPTCHA v2/v3 Library for .NET 6 and above</Description>
+    <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET 6 and above</PackageDescription>
     <RepositoryUrl>https://github.com/michaelvs97/AspNetCore.ReCaptcha</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Title>AspNetCore.ReCaptcha</Title>
-    <LangVersion>8.0</LangVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

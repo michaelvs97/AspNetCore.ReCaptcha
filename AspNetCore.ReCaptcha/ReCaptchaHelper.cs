@@ -96,6 +96,7 @@ namespace AspNetCore.ReCaptcha
         /// <param name="errorCallback">Google ReCaptcha error callback method. Used in v2 ReCaptcha.</param>
         /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
         /// <param name="autoTheme">Indicates whether the theme is automatically set to 'dark' based on the user's system settings.</param>
+        /// <param name="nonce">CSP nonce to be added to the inline script tag</param>
         /// <returns>HtmlString with Recaptcha elements</returns>
         public static IHtmlContent ReCaptcha(
             this IHtmlHelper helper,
@@ -110,7 +111,8 @@ namespace AspNetCore.ReCaptcha
             string callback = null,
             string errorCallback = null,
             string expiredCallback = null,
-            bool autoTheme = false)
+            bool autoTheme = false,
+            string nonce = null)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException("id can't be null");
@@ -127,11 +129,11 @@ namespace AspNetCore.ReCaptcha
             {
                 default:
                 case ReCaptchaVersion.V2:
-                    return ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme);
+                    return ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme, nonce);
                 case ReCaptchaVersion.V2Invisible:
                     return ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
                 case ReCaptchaVersion.V3:
-                    return ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext));
+                    return ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext), nonce);
             }
         }
     }

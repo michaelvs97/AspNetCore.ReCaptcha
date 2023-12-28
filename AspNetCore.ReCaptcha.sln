@@ -5,15 +5,13 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.ReCaptcha", "AspNetCore.ReCaptcha\AspNetCore.ReCaptcha.csproj", "{7D4989AC-7626-43CD-A6F8-67B36FD16611}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.ReCaptcha.NetCore31", "Samples\AspNetCore.ReCaptcha.NetCore31\AspNetCore.ReCaptcha.NetCore31.csproj", "{019D0A77-EE87-406C-B7EB-E0CB31DF2375}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{64E8F22C-ECE7-463C-A4FA-4C38E46712CB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.ReCaptcha.Net50", "Samples\AspNetCore.ReCaptcha.Net50\AspNetCore.ReCaptcha.Net50.csproj", "{325664CA-6512-4F08-A9D3-796F5FF290E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Tests", "AspNetCore.ReCaptcha.Tests\AspNetCore.ReCaptcha.Tests.csproj", "{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Net60", "Samples\AspNetCore.ReCaptcha.Net60\AspNetCore.ReCaptcha.Net60.csproj", "{69C5814C-1012-49AC-9126-C6F7FD999213}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.Mvc", "Samples\AspNetCore.ReCaptcha.Mvc\AspNetCore.ReCaptcha.Mvc.csproj", "{918695CD-B55A-4892-824A-79B36A751167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ReCaptcha.RazorPages", "Samples\AspNetCore.ReCaptcha.RazorPages\AspNetCore.ReCaptcha.RazorPages.csproj", "{10CD5D28-F5EE-40A6-B3D2-111D40B1B058}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,30 +23,25 @@ Global
 		{7D4989AC-7626-43CD-A6F8-67B36FD16611}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D4989AC-7626-43CD-A6F8-67B36FD16611}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D4989AC-7626-43CD-A6F8-67B36FD16611}.Release|Any CPU.Build.0 = Release|Any CPU
-		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{019D0A77-EE87-406C-B7EB-E0CB31DF2375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{325664CA-6512-4F08-A9D3-796F5FF290E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{505186CC-E3F9-4BDB-8C94-49BC27DAC9FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69C5814C-1012-49AC-9126-C6F7FD999213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69C5814C-1012-49AC-9126-C6F7FD999213}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69C5814C-1012-49AC-9126-C6F7FD999213}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69C5814C-1012-49AC-9126-C6F7FD999213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918695CD-B55A-4892-824A-79B36A751167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918695CD-B55A-4892-824A-79B36A751167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918695CD-B55A-4892-824A-79B36A751167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918695CD-B55A-4892-824A-79B36A751167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10CD5D28-F5EE-40A6-B3D2-111D40B1B058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10CD5D28-F5EE-40A6-B3D2-111D40B1B058}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10CD5D28-F5EE-40A6-B3D2-111D40B1B058}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10CD5D28-F5EE-40A6-B3D2-111D40B1B058}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{019D0A77-EE87-406C-B7EB-E0CB31DF2375} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
-		{325664CA-6512-4F08-A9D3-796F5FF290E5} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
-		{69C5814C-1012-49AC-9126-C6F7FD999213} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
+		{918695CD-B55A-4892-824A-79B36A751167} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
+		{10CD5D28-F5EE-40A6-B3D2-111D40B1B058} = {64E8F22C-ECE7-463C-A4FA-4C38E46712CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {409CE661-9EE4-4E88-AB83-CD606C9171E6}

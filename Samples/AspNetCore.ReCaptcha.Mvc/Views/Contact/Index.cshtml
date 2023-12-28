@@ -17,10 +17,6 @@ function submitForm() {
 }
 </script>
 
-<p>
-    Culture: @(Context.Features.Get<IRequestCultureFeature>().RequestCulture.UICulture.Name)
-</p>
-
 <form method="post" asp-action="SubmitForm">
     <div asp-validation-summary="All"></div>
 
@@ -38,6 +34,7 @@ function submitForm() {
         @switch (ReCaptchaSettings.Value.Version)
         {
             case ReCaptchaVersion.V2:
+            case ReCaptchaVersion.V3:
                 // Optionally override language of the recaptcha
                 // @Html.ReCaptcha(language: "en")
                 @Html.ReCaptcha()

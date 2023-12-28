@@ -9,7 +9,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV2()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV2(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV2(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test", "test", false, "nonce");
 
             Assert.NotNull(result);
         }
@@ -25,7 +25,7 @@ namespace AspNetCore.ReCaptcha.Tests
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV3()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", 1);
+            var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", 1, "nonce");
 
             Assert.NotNull(result);
         }

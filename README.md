@@ -74,6 +74,12 @@ public IActionResult SubmitForm(ContactViewModel model)
 }
 ```
 
+### Manual Validation
+If you need to validate a recaptcha but cannot use the `[ValidateReCaptcha]` attribute for some reason (maybe you're using a JSON POST instead of form POST).
+In that case you can inject the `AspNetCore.ReCaptcha.IReCaptchaService` service and use one of the two methods on there:
+`VerifyAsync` verifies the provided token against the recaptcha service and returns whether or not it is successful. For V3 this also checks if the score is greater than or equal to the ScoreThreshold that can be configured in the appsettings.
+`GetVerifyResponseAsync` calls the recaptcha service with the provided token and returns the response. The response will contain whether it is successful or not and for V3 what the score is.
+
 ### Language support
 By default, AspNetCore.ReCaptcha will use the language that is being used in the request. So we will make use of the Culture of the `HttpContext`. However, you can override this by specifying a language in the ReCaptcha element. This is shown in the next example:
 ```cshtml

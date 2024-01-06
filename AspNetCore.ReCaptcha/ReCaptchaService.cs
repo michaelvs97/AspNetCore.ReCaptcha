@@ -13,7 +13,7 @@ namespace AspNetCore.ReCaptcha
         private readonly ILogger<ReCaptchaService> _logger;
         private readonly ReCaptchaSettings _reCaptchaSettings;
 
-        public ReCaptchaService(HttpClient client, IOptions<ReCaptchaSettings> reCaptchaSettings, ILogger<ReCaptchaService> logger)
+        public ReCaptchaService(HttpClient client, IOptionsSnapshot<ReCaptchaSettings> reCaptchaSettings, ILogger<ReCaptchaService> logger)
         {
             _client = client;
             _logger = logger;

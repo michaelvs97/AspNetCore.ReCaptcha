@@ -128,7 +128,7 @@ namespace AspNetCore.ReCaptcha
             var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
             if (localizerFactory != null)
             {
-                var settings = context.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>();
+                var settings = context.HttpContext.RequestServices.GetRequiredService<IOptionsSnapshot<ReCaptchaSettings>>();
 
                 IStringLocalizer localizer = null;
                 if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)

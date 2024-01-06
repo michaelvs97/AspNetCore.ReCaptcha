@@ -30,7 +30,7 @@ namespace AspNetCore.ReCaptcha.Tests
                 };
             }
 
-            var reCaptchaSettingsMock = new Mock<IOptions<ReCaptchaSettings>>();
+            var reCaptchaSettingsMock = new Mock<IOptionsSnapshot<ReCaptchaSettings>>();
             reCaptchaSettingsMock.Setup(x => x.Value).Returns(reCaptchaSettings);
 
             logger ??= new NullLogger<ReCaptchaService>();

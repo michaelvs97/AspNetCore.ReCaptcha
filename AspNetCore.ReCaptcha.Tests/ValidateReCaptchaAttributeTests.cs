@@ -168,8 +168,20 @@ namespace AspNetCore.ReCaptcha.Tests
                 serviceProviderMock.Setup(x => x.GetService(typeof(IStringLocalizerFactory)))
                     .Returns(stringLocalizerFactory.Object);
 
+                var reCaptchaSettings = new ReCaptchaSettings
+                {
+                    LocalizerProvider = (type, factory) => factory.Create(type),
+                };
+
                 serviceProviderMock.Setup(x => x.GetService(typeof(IOptions<ReCaptchaSettings>)))
-                    .Returns(new OptionsWrapper<ReCaptchaSettings>(new ReCaptchaSettings { LocalizerProvider = (type, factory) => factory.Create(type) }));
+                    .Returns(new OptionsWrapper<ReCaptchaSettings>(reCaptchaSettings));
+
+                var reCaptchaSettingsMock = new Mock<IOptionsSnapshot<ReCaptchaSettings>>();
+                reCaptchaSettingsMock.Setup(x => x.Value)
+                    .Returns(reCaptchaSettings);
+
+                serviceProviderMock.Setup(x => x.GetService(typeof(IOptionsSnapshot<ReCaptchaSettings>)))
+                    .Returns(reCaptchaSettingsMock.Object);
 
                 var httpContextMock = new Mock<HttpContext>();
                 httpContextMock.Setup(x => x.RequestServices)
@@ -361,8 +373,19 @@ namespace AspNetCore.ReCaptcha.Tests
                 serviceProviderMock.Setup(x => x.GetService(typeof(IStringLocalizerFactory)))
                     .Returns(stringLocalizerFactory.Object);
 
+                var reCaptchaSettings = new ReCaptchaSettings
+                {
+                    LocalizerProvider = (type, factory) => factory.Create(type),
+                };
                 serviceProviderMock.Setup(x => x.GetService(typeof(IOptions<ReCaptchaSettings>)))
-                    .Returns(new OptionsWrapper<ReCaptchaSettings>(new ReCaptchaSettings { LocalizerProvider = (type, factory) => factory.Create(type) }));
+                    .Returns(new OptionsWrapper<ReCaptchaSettings>(reCaptchaSettings));
+
+                var reCaptchaSettingsMock = new Mock<IOptionsSnapshot<ReCaptchaSettings>>();
+                reCaptchaSettingsMock.Setup(x => x.Value)
+                    .Returns(reCaptchaSettings);
+
+                serviceProviderMock.Setup(x => x.GetService(typeof(IOptionsSnapshot<ReCaptchaSettings>)))
+                    .Returns(reCaptchaSettingsMock.Object);
 
                 var httpContextMock = new Mock<HttpContext>();
                 httpContextMock.Setup(x => x.RequestServices)

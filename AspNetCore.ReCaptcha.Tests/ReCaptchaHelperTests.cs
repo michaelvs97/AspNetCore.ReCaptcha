@@ -26,6 +26,7 @@ public class ReCaptchaHelperTests
         
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<IOptions<ReCaptchaSettings>>(reCaptchaSettingsSnapshot);
+        serviceCollection.AddSingleton<IOptionsSnapshot<ReCaptchaSettings>>(reCaptchaSettingsSnapshot);
 
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 

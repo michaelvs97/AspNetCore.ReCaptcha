@@ -123,17 +123,22 @@ namespace AspNetCore.ReCaptcha
             language ??= helper.ViewContext.HttpContext.Features.Get<IRequestCultureFeature>()?.RequestCulture
                 .UICulture.TwoLetterISOLanguageName;
 
-            var settings = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>().Value;
+            // Url can't be updated while the app is running as it is used as BaseUri in the HttpClient registration.
+            var staticSettings = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<IOptions<ReCaptchaSettings>>().Value;
+            var settings = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<IOptionsSnapshot<ReCaptchaSettings>>().Value;
+
+            if (!settings.Enabled)
+                return HtmlString.Empty;
 
             switch (settings.Version)
             {
                 default:
                 case ReCaptchaVersion.V2:
-                    return ReCaptchaGenerator.ReCaptchaV2(settings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme, nonce);
+                    return ReCaptchaGenerator.ReCaptchaV2(staticSettings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme, nonce);
                 case ReCaptchaVersion.V2Invisible:
-                    return ReCaptchaGenerator.ReCaptchaV2Invisible(settings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
+                    return ReCaptchaGenerator.ReCaptchaV2Invisible(staticSettings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
                 case ReCaptchaVersion.V3:
-                    return ReCaptchaGenerator.ReCaptchaV3(settings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext), nonce);
+                    return ReCaptchaGenerator.ReCaptchaV3(staticSettings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext), nonce);
             }
         }
     }

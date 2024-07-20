@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <PackageId>AspNetCore.ReCaptcha</PackageId>
-    <Version>1.8.1</Version>
+    <Version>1.8.2</Version>
     <Authors>Michaelvs97,sleeuwen</Authors>
     <Description>Google ReCAPTCHA v2/v3 Library for .NET 6 and above</Description>
     <PackageDescription>Google ReCAPTCHA v2/v3 Library for .NET 6 and above</PackageDescription>

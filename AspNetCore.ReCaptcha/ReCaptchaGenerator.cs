@@ -67,13 +67,21 @@ namespace AspNetCore.ReCaptcha
             return content;
         }
 
-        public static IHtmlContent ReCaptchaV2Invisible(Uri baseUrl, string siteKey, string text, string className, string language, string callback, string badge)
+        public static IHtmlContent ReCaptchaV2Invisible(Uri baseUrl, string siteKey, string text, string className, string language, string callback, string errorCallback, string expiredCallback, string badge)
         {
             var content = new HtmlContentBuilder();
             content.AppendFormat(@"<button class=""g-recaptcha {0}""", className);
             content.AppendFormat(@" data-sitekey=""{0}""", siteKey);
-            content.AppendFormat(@" data-callback=""{0}""", callback);
-            content.AppendFormat(@" data-badge=""{0}""", badge);
+
+            if (!string.IsNullOrEmpty(badge))
+                content.AppendFormat(@" data-badge=""{0}""", badge);
+            if (!string.IsNullOrEmpty(callback))
+                content.AppendFormat(@" data-callback=""{0}""", callback);
+            if (!string.IsNullOrEmpty(expiredCallback))
+                content.AppendFormat(@" data-expired-callback=""{0}""", expiredCallback);
+            if (!string.IsNullOrEmpty(errorCallback))
+                content.AppendFormat(@" data-error-callback=""{0}""", errorCallback);
+
             content.AppendFormat(@">{0}</button>", text);
             content.AppendLine();
 

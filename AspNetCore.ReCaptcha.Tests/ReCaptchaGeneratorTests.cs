@@ -12,14 +12,19 @@ namespace AspNetCore.ReCaptcha.Tests
             var result = ReCaptchaGenerator.ReCaptchaV2(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test", "test", false, "nonce");
 
             Assert.NotNull(result);
+            Assert.Equal(@"<div class=""g-recaptcha"" data-sitekey=""test"" data-size=""test"" data-theme=""test"" data-callback=""test"" data-error-callback=""test"" data-expired-callback=""test""></div>
+<script src=""https://www.google.com/recaptcha/api.js?hl=test"" defer></script>",
+                result.ToHtmlString());
         }
 
         [Fact]
         public void ReCaptchaGeneratorReturnsReCaptchaForV2Invisible()
         {
-            var result = ReCaptchaGenerator.ReCaptchaV2Invisible(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test");
+            var result = ReCaptchaGenerator.ReCaptchaV2Invisible(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", "test", "test", "test", "test");
 
             Assert.NotNull(result);
+            Assert.Equal(@"<button class=""g-recaptcha test"" data-sitekey=""test"" data-badge=""test"" data-callback=""test"" data-expired-callback=""test"" data-error-callback=""test"">test</button>
+<script src=""https://www.google.com/recaptcha/api.js?hl=test"" defer></script>", result.ToHtmlString());
         }
 
         [Fact]
@@ -28,6 +33,10 @@ namespace AspNetCore.ReCaptcha.Tests
             var result = ReCaptchaGenerator.ReCaptchaV3(new Uri("https://www.google.com/recaptcha/"), "test", "test", "test", "test", 1, "nonce");
 
             Assert.NotNull(result);
+            Assert.Equal(
+                @"<input id=""g-recaptcha-response-1"" name=""g-recaptcha-response"" type=""hidden"" value="""" /><script src=""https://www.google.com/recaptcha/api.js?render=test&hl=test""></script><script nonce=""nonce"">function updateReCaptcha1() {grecaptcha.execute('test', {action: 'test'}).then(function(token){document.getElementById('g-recaptcha-response-1').value = token;});}grecaptcha.ready(function() {setInterval(updateReCaptcha1, 100000); updateReCaptcha1()});</script>
+",
+                result.ToHtmlString());
         }
 
         [Theory]

@@ -136,7 +136,7 @@ namespace AspNetCore.ReCaptcha
                 case ReCaptchaVersion.V2:
                     return ReCaptchaGenerator.ReCaptchaV2(staticSettings.RecaptchaBaseUrl, settings.SiteKey, size, theme, language, callback, errorCallback, expiredCallback, autoTheme, nonce);
                 case ReCaptchaVersion.V2Invisible:
-                    return ReCaptchaGenerator.ReCaptchaV2Invisible(staticSettings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, badge);
+                    return ReCaptchaGenerator.ReCaptchaV2Invisible(staticSettings.RecaptchaBaseUrl, settings.SiteKey, text, className, language, callback, errorCallback, expiredCallback, badge);
                 case ReCaptchaVersion.V3:
                     return ReCaptchaGenerator.ReCaptchaV3(staticSettings.RecaptchaBaseUrl, settings.SiteKey, action, language, callback, ReCaptchaGenerator.GenerateId(helper.ViewContext), nonce);
             }

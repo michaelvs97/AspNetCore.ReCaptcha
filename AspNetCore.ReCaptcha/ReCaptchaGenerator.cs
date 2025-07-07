@@ -1,4 +1,7 @@
 using System;
+using System.Net;
+using System.Reflection.Metadata;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -31,7 +34,7 @@ namespace AspNetCore.ReCaptcha
         /// <param name="expiredCallback">Google ReCaptcha expired callback method. Used in v2 ReCaptcha.</param>
         /// <param name="autoTheme">Indicates whether the theme is automatically set to 'dark' based on the user's system settings.</param>
         /// <returns></returns>
-        public static IHtmlContent ReCaptchaV2(Uri baseUrl, string siteKey, string size, string theme, string language, 
+        public static IHtmlContent ReCaptchaV2(Uri baseUrl, string siteKey, string size, string theme, string language,
             string callback, string errorCallback, string expiredCallback, bool autoTheme = false, string nonce = null)
         {
             var content = new HtmlContentBuilder();
@@ -50,7 +53,8 @@ namespace AspNetCore.ReCaptcha
 
             content.AppendFormat("></div>");
             content.AppendLine();
-            content.AppendFormat(@"<script src=""{0}api.js?hl={1}"" defer></script>", baseUrl, language);
+            content.AppendFormat(@"<script src=""{0}api.js?hl={1}""", baseUrl, language);
+            content.AppendNonce(nonce, " defer></script>");
 
             if (autoTheme)
             {
@@ -94,11 +98,11 @@ namespace AspNetCore.ReCaptcha
         {
             var content = new HtmlContentBuilder();
             content.AppendHtml(@$"<input id=""g-recaptcha-response-{id}"" name=""g-recaptcha-response"" type=""hidden"" value="""" />");
-            content.AppendFormat(@"<script src=""{0}api.js?render={1}&hl={2}""></script>", baseUrl, siteKey, language);
+            content.AppendFormat(@"<script src=""{0}api.js?render={1}&hl={2}""", baseUrl, siteKey, language);
+            content.AppendNonce(nonce, "></script>");
+            content.AppendHtml("");
             content.AppendHtml("<script");
-            if (!string.IsNullOrEmpty(nonce))
-                content.AppendFormat(" nonce=\"{0}\"", nonce);
-            content.AppendHtml(">");
+            content.AppendNonce(nonce,">");
             content.AppendHtml($"function updateReCaptcha{id}() {{");
             content.AppendFormat("grecaptcha.execute('{0}', {{action: '{1}'}}).then(function(token){{", siteKey, action);
             content.AppendHtml($"document.getElementById('g-recaptcha-response-{id}').value = token;");
@@ -109,6 +113,15 @@ namespace AspNetCore.ReCaptcha
             content.AppendLine();
 
             return content;
+        }
+
+        private static IHtmlContentBuilder AppendNonce(this IHtmlContentBuilder builder, string nonce, string closingTag)
+        {
+            if (!string.IsNullOrWhiteSpace(nonce))
+                builder.AppendFormat(" nonce=\"{0}\"", nonce);
+
+            builder.AppendHtml(closingTag);
+            return builder;
         }
     }
 }

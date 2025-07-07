@@ -6,15 +6,15 @@ namespace AspNetCore.ReCaptcha
 {
     internal static class ReCaptchaGenerator
     {
-        private static string ViewDataKey = "__ReCaptchaGeneratedId";
+        private const string ViewDataKey = "__AspNetCore.ReCaptcha__GeneratedId";
 
         public static int GenerateId(ViewContext viewContext)
         {
             var id = 0;
-            if (viewContext.ViewData.TryGetValue(ViewDataKey, out var value) && value is int _id)
-                id = _id;
+            if (viewContext.HttpContext.Items.TryGetValue(ViewDataKey, out var value) && value is int lastUsedId)
+                id = lastUsedId;
 
-            viewContext.ViewData[ViewDataKey] = ++id;
+            viewContext.HttpContext.Items[ViewDataKey] = ++id;
             return id;
         }
 
